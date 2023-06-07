@@ -13,6 +13,25 @@
 	<!-- typeAliases -->
 	<typeAliases>
 		<typeAlias alias="UserDTO" type="com.gdu.book.domain.UserDTO" />
+		<typeAlias alias="AnnouncementDTO" type="com.gdu.book.domain.AnnouncementDTO" />
+		<typeAlias alias="BookDTO" type="com.gdu.book.domain.BookDTO" />
+		<typeAlias alias="BookReviewDTO" type="com.gdu.book.domain.BookReviewDTO" />
+		<typeAlias alias="CartDetailDTO" type="com.gdu.book.domain.CartDetailDTO" />
+		<typeAlias alias="CartDTO" type="com.gdu.book.domain.CartDTO" />
+		<typeAlias alias="DeclarationDTO" type="com.gdu.book.domain.DeclarationDTO" />
+		<typeAlias alias="MeetinChatDTO" type="com.gdu.book.domain.MeetingChatDTO" />
+		<typeAlias alias="MeetingDTO" type="com.gdu.book.domain.MeetingDTO" />
+		<typeAlias alias="MeetingMemberDTO" type="com.gdu.book.domain.MeetingMemberDTO" />
+		<typeAlias alias="MeetingNoticeDTO" type="com.gdu.book.domain.MeetingNoticeDTO" />
+		<typeAlias alias="MsgDTO" type="com.gdu.book.domain.MsgDTO" />
+		<typeAlias alias="OpenTalkBoardDetailDTO" type="com.gdu.book.domain.OpenTalkBoardDetailDTO" />
+		<typeAlias alias="OpenTalkBoardDTO" type="com.gdu.book.domain.OpenTalkBoardDTO" />
+		<typeAlias alias="PaymentDTO" type="com.gdu.book.domain.PaymentDTO" />
+		<typeAlias alias="QnaDTO" type="com.gdu.book.domain.QnaDTO" />
+		<typeAlias alias="UserAccessDTO" type="com.gdu.book.domain.UserAccessDTO" />
+		<typeAlias alias="UserLeaveDTO" type="com.gdu.book.domain.UserLeaveDTO" />
+		<typeAlias alias="UserRecommenedDTO" type="com.gdu.book.domain.UserRecommenedDTO" />
+		<typeAlias alias="UserSleepDTO" type="com.gdu.book.domain.UserSleepDTO" />
 	</typeAliases>
 
 </configuration>
