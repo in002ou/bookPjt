@@ -17,12 +17,14 @@
 </head>
 <body>
 	
-	<div class="gnb">
-		<a th:href="@{/bbs/list.html}">공지사항</a>
-		<a th:href="@{/blog/list.html}">도서</a>
-  		<a th:href="@{/meeting/list.html}">모임</a>
-  		<a th:href="@{/product/list.html}">독서관찾기</a>
-  		<a th:href="@{/chat.html}">1:1문의</a>
+	<div class="header_section" th:fragment="gnb">
+		<div class="gnb">
+			<a th:href="@{/bbs/list.html}">공지사항</a>
+			<a th:href="@{/blog/list.html}">도서</a>
+	  		<a th:href="@{/meeting/list.html}">모임</a>
+	  		<a th:href="@{/product/list.html}">독서관찾기</a>
+	  		<a th:href="@{/chat.html}">1:1문의</a>
+		</div>
 	</div>
 	
 </body>
