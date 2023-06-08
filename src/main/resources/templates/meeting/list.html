@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/verticalGnb::head('모임활동')}"></head>
+<script>
+	
+</script>
+<style>
+.title_create {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid 1px gray;
+}
+
+.title {
+  margin-right: 10px; /* 제목과 버튼 사이의 간격을 조정합니다 */
+}
+</style>
+<body>
+
+	<div th:replace="~{layout/verticalGnb::gnb}"></div>
+
+	<div class="login_wrap">
+		<div th:if="${#strings.isEmpty(session.loginId)}" class="user_menu">
+			<span><a href="/user/login.html">로그인</a></span>
+			<span><a href="/user/agree.html">회원가입</a></span>
+		</div>
+		<div th:unless="${#strings.isEmpty(session.loginId)}" class="user_menu">
+			<span><a href="/user/confirm.html" th:text="${session.loginId}"></a>님 반갑습니다.</span>
+			<span><a href="/user/logout">로그아웃</a></span>
+		</div>
+	</div>
+	
+	<div class="meeting_wrap">
+		<div class="title_create" style="border-bottom: solid 1px gray">
+			<div class="title">
+				<h1>모임</h1>
+			</div>
+			<div>
+				<input class="create_meeting_btn" type="button" value="모임생성">
+			</div>
+		</div>
+		<div class="meeting_list" id="meetingList">
+			
+		</div>
+	</div>
+	
+	<div class="notice_wrap">
+		<div class="notice_list" id="noticeList">
+			
+		</div>
+	</div>
+	
+
+		
+
+	<div th:replace="~{layout/footer::foot}"></div>
+
+</body>
+</html>
