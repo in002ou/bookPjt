@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/header::head('환영합니다')}"></head>
-<script>
-	
-</script>
+
 <style>
 	button {
     margin: 20px;
@@ -119,12 +117,11 @@
 				</div>
 			</div>	
 			<hr>
-			<form method="post" action="@{/book/bookReviewadd.do}">
+			<form method="post" th:action="@{/book/bookReviewadd.do}">
 				<div class="bookReview">
 					<strong>한줄평 등록</strong>
 					<div class="reviewBtnandContent">
 				    	<textarea id="review" name="review" rows="4" cols="50" placeholder="한줄평을 입력해주세요!"></textarea>
-				    	<button class="w-btn w-btn-indigo">등록</button>
 				  	</div>
 					<div>
 					    <label>별점:</label>
@@ -139,10 +136,14 @@
 					    <input type="radio" id="star1" name="rating" value="5">
 					    <label for="star1">★★★★★</label>
 					</div>
+				    	<button class="w-btn w-btn-indigo">등록</button>
 				</div>
 			</form>
 		</div>
 	<div th:replace="~{layout/footer::foot}"></div>
 	
 </body>
+<script>
+	 
+</script>
 </html>
