@@ -8,14 +8,14 @@
 
 	<insert id="insertBookReview" parameterType="BookReviewDTO">
 		INSERT INTO BOOK_REVIEW_T(
-			  BOOK_NO
-			, USER_NO
+			  USER_NO
+			, BOOK_NO 
 			, BOOK_REVIEW
 			, BOOK_RATING
-			, BOOK_RATING_CREATED_A
+			, BOOK_REVIEW_CREATED_AT
 		) VALUES (
-			  #{bookDTO.bookNo}
-			, #{userDTO.userNo}
+			  #{userDTO.userNo}
+			, #{bookDTO.bookNo}
 			, #{bookReview}
 			, #{bookRating}
 			, NOW()

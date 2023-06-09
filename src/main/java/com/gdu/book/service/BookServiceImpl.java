@@ -26,7 +26,7 @@ public class BookServiceImpl implements BookService {
 		UserDTO userDTO = new UserDTO();
 		BookDTO bookDTO = new BookDTO();
 		bookDTO.setBookNo(1);
-		userDTO.setUserId("aa11");
+		userDTO.setUserNo(1);
 		bookReviewDTO.setBookReview(review);
 		bookReviewDTO.setBookRating(rating);
 		bookReviewDTO.setUserDTO(userDTO);
