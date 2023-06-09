@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/header::head('관리자 페이지')}"></head>
+<style>
+	.queryBook{
+		margin-top: 170px;
+	}
+</style>
+<body>
+
+	
+	<div th:replace="~{layout/header::gnb}"></div>
+	
+	<div class="queryBook">
+		<form id="frmAddBook">
+	  		<input type="text" name="query" id="query">
+	  		<span><input type="button" id="queryBook" value="검색하기"> </span>
+  		</form>
+  
+  		<form id="book" method="post">asd</form>
+	</div>
+  	
+  	<script>
+  
+  	function queryBook(){
+  	$('#queryBook').on('click', function(){
+		if($('#query').val() == ''){
+	    alert('책 제목을 입력해 주세요.');
+	    return;
+	    }
+		$.ajax({
+		type: 'get',
+		url: '/manager/addBook.do',
+		data: $('#frmAddBook').serialize(),
+		dataType: 'json',
+		success: function(resData){
+			$('#book').empty();
+				var str = '<div>';
+				console.log(resData);
+			$.each(resData.items, function(i, book){
+				$('#book').attr('th:action','@{/manager/removeBook.do}');
+				str += '<div>' + book.title;  // str += book['title']
+				str += '<input type="hidden" name="bookNo" value="' + book.isbn + '">';
+				str += '<button>삭제하기</button>';
+				str += '</div>';
+			})
+			str += '</div>';
+			$('#book').append(str);
+			}
+		})
+  	})
+  }
+  		
+  queryBook();
+  
+  </script>
+
+</body>
+</html>
