@@ -3,6 +3,7 @@ package com.gdu.book.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,9 +25,15 @@ public class ManagerController {
 	}
 	
 	@ResponseBody
-    @GetMapping(value="/addBook.do", produces="application/json")
-    public String addBook(HttpServletRequest request) {
-      return managerService.addBook(request);
+    @GetMapping(value="/queryBook.do", produces="application/json")
+    public String queryBook(HttpServletRequest request) {
+      return managerService.queryBook(request);
     }
+	
+	@GetMapping("/addBook.do")
+	public String addBook(HttpServletRequest request, Model model) {
+		
+		return null;
+	}
 	
 }

@@ -17,12 +17,12 @@
 	  		<span><input type="button" id="queryBook" value="검색하기"> </span>
   		</form>
   
-  		<form id="book" method="post">asd</form>
+  		<div id="bookList"></div>
 	</div>
   	
   	<script>
   
-  	function queryBook(){
+  	function fnQueryBook(){
   	$('#queryBook').on('click', function(){
 		if($('#query').val() == ''){
 	    alert('책 제목을 입력해 주세요.');
@@ -30,29 +30,53 @@
 	    }
 		$.ajax({
 		type: 'get',
-		url: '/manager/addBook.do',
+		url: '/manager/queryBook.do',
 		data: $('#frmAddBook').serialize(),
 		dataType: 'json',
 		success: function(resData){
-			$('#book').empty();
-				var str = '<div>';
+			$('#bookList').empty();
+				var str = '';
 				console.log(resData);
 			$.each(resData.items, function(i, book){
-				$('#book').attr('th:action','@{/manager/removeBook.do}');
-				str += '<div>' + book.title;  // str += book['title']
-				str += '<input type="hidden" name="bookNo" value="' + book.isbn + '">';
-				str += '<button>삭제하기</button>';
+				// $('#book').attr('th:action','@{/manager/addBook.do}');
+				str += '<form class="book" th:action="@{/manager/addBook.do}" method="get">' + '<image src="' + book.image + '" width="200px">';
+				str += '<br>';
+				str += book.title + '<input type="button" class="addBook" value="등록하기">'; // str += book['title']
 				str += '</div>';
+				str += '<hr>';
+				str += '<input type="hidden" name="bookNo" value="' + book.isbn + '">';
+				str += '<input type="hidden" name="bookTitle" value="' + book.title + '">';
+				str += '<input type="hidden" name="bookPrice" value="' + book.discount + '">';
+				str += '<input type="hidden" name="bookAt" value="' + book.pubdate + '">';
+				str += '<input type="hidden" name="bookAuthor" value="' + book.author + '">';
+				str += '<input type="hidden" name="bookImage" value="' + book.image + '">';
+				str += '<input type="hidden" name="bookDescription" value="' + book.description + '">';
+				str += '</form>';
+				})
+				$('#bookList').append(str);
+				}
 			})
-			str += '</div>';
-			$('#book').append(str);
-			}
-		})
-  	})
-  }
-  		
-  queryBook();
-  
+ 		})
+	}
+  	
+  	
+  	function fnAddBook(){
+  		$('.addBook').on('click', function(){
+	  		$.ajax({
+	  			type: 'get',
+	  			url: '/manager/addBook.do',
+	  			data: $('.book').serialize(),
+	  			dataType: 'json',
+	  			success: function(resData){
+	  				alert('도서가 등록되었습니다.');
+	  				
+	  			}
+	  		})
+  		})
+  	}
+  	
+	fnAddBook();
+	fnQueryBook();
   </script>
 
 </body>
