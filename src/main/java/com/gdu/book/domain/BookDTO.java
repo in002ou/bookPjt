@@ -17,4 +17,5 @@ public class BookDTO {
 	private String bookAuthor;
 	private String bookImage;
 	private String bookDescription;
+	private int bookState;
 }
