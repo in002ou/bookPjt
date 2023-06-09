@@ -247,11 +247,12 @@
    <!-- 휴면복원 1단계 : 휴면 테이블의 데이터를 회원 테이블에 저장하기 -->
    <insert id="insertRestoreUser" parameterType="String">
    	INSERT INTO USER_T (
-   		USER_ID
+   		USER_NO
+   	  ,	USER_ID
   	  , USER_PASSWORD
   	  , USER_NAME
   	  , USER_GENDER
-  	  , USER_EMAIL
+  	  , USER_EMAIL	
   	  , USER_MOBILE
   	  , USER_BIRTHYEAR
   	  , USER_BIRTHDATE
@@ -263,40 +264,43 @@
   	  , AGREECODE
   	  , JOINED_AT
   	  , PW_MODIFIED_AT
-  	  , AUTOLOGIN_ID
-  	  , AUTOLOGIN_EXPIRED_AT
   	  , USER_PROFILE
   	  , USER_INTRODUCE
   	  , USER_POINT
   	  , USER_GRADE	
   	  , USER_SOCIAL
-   	) (SELECT USER_NO
-   			, USER_ID
-   			, USER_PASSWORD
-		    , USER_NAME
-		    , USER_GENDER
-		  	, USER_EMAIL
-		  	, USER_MOBILE
-		  	, USER_BIRTHYEAR
-		  	, USER_BIRTHDATE
-		  	, POSTCODE
-		 	, ROAD_ADDRESS
-		  	, JIBUN_ADDRESS
-		  	, DETAIL_ADDRESS
-		  	, EXTRA_ADDRESS
-		  	, AGREECODE
-		  	, JOINED_AT
-		  	, PW_MODIFIED_AT
-		  	, AUTOLOGIN_ID
-		  	, AUTOLOGIN_EXPIRED_AT
-		  	, USER_PROFILE
-		  	, USER_INTRODUCE
-		  	, USER_POINT
-		  	, USER_GRADE	
-		  	, USER_SOCIAL
-   	
-   	)
-   
+   	) (SELECT USER_SLEEP_NO
+   			, USER_SLEEP_ID
+   			, USER_SLEEP_PASSWORD
+		    , USER_SLEEP_NAME
+		    , USER_SLEEP_GENDER
+		  	, USER_SLEEP_EMAIL
+		  	, USER_SLEEP_MOBILE
+		  	, USER_SLEEP_BIRTHYEAR
+		  	, USER_SLEEP_BIRTHDATE
+		  	, USER_SLEEP_POSTCODE
+		 	, USER_SLEEP_ROAD_ADDRESS
+		  	, USER_SLEEP_JIBUN_ADDRESS
+		  	, USER_SLEEP_DETAIL_ADDRESS
+		  	, USER_SLEEP_EXTRA_ADDRESS
+		  	, USER_SLEEP_AGREECODE
+		  	, USER_SLEEP_JOINED_AT
+		  	, USER_SLEEP_PW_MODIFIED_AT
+		  	, USER_SLEEP_PROFILE
+		  	, USER_SLEEP_INTRODUCE
+		  	, USER_SLEEP_POINT
+		  	, USER_SLEEP_GRADE	
+		  	, USER_SLEEP_SOCIAL
+		 FROM USER_SLEEP_T
+		WHERE USER_SLEEP_ID = #{userId})
    </insert>
+   
+   <!-- 휴면복원 2단계 : 복원할 회원을 SLEEP_USER_T 테이블에서 삭제하기 -->
+  <delete id="deleteSleepUser" parameterType="String">
+    DELETE
+      FROM USER_SLEEP_T
+     WHERE USER_SLEEP_ID = #{userId}
+  </delete>
+  
   
 </mapper>
