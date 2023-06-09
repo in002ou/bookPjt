@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--/* 	조각이름 : head, 파라미터 : title */-->
+<head th:fragment="verticalHead(title)">
+<meta charset="UTF-8">
+<title th:text="${title}"></title>
+<script th:src="@{/js/lib/jquery-3.6.4.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" th:href="@{/css/init.css}">
+<link rel="stylesheet" th:href="@{/css/verticalGnb.css}">
+</head>
+<body>
+	
+	<div class="header_section" th:fragment="gnb">
+		<div class="gnb">
+			<a th:href="@{/bbs/list.html}">공지사항</a>
+			<a th:href="@{/blog/list.html}">도서</a>
+	  		<a th:href="@{/meeting/list.html}">모임</a>
+	  		<a th:href="@{/product/list.html}">도서관찾기</a>
+	  		<a th:href="@{/chat.html}">1:1문의</a>
+		</div>
+	</div>
+	
+</body>
+</html>

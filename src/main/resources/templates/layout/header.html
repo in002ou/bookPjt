@@ -4,14 +4,10 @@
 <head th:fragment="head(title)">
 <meta charset="UTF-8">
 <title th:text="${title}"></title>
-<script th:src="@{/js/jquery-3.6.1.min.js}"></script>
-<script th:src="@{/js/moment-with-locales.js}"></script>
-<script th:src="@{/summernote-0.8.18-dist/summernote-lite.js}"></script>
-<script th:src="@{/summernote-0.8.18-dist/lang/summernote-ko-KR.min.js}"></script>
+<script th:src="@{/js/jquery-3.6.4.min.js}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-<link rel="stylesheet" th:href="@{/summernote-0.8.18-dist/summernote-lite.css}">
 <link rel="stylesheet" th:href="@{/css/init.css}">
 <link rel="stylesheet" th:href="@{/css/header.css}">
 </head>
@@ -43,10 +39,11 @@
 			        	</div>
 			        </li>
 			        <li><a th:href="@{/bbs/list.html}">공지사항</a></li>
-			        <li><a th:href="@{/blog/list.html}">도서</a></li>
-			        <li><a th:href="@{/upload/list.html}">모임</a></li>
-			        <li><a th:href="@{/product/list.html}">독서관찾기</a></li>
+			        <li><a th:href="@{/book/bookList.html}">도서</a></li>
+			        <li><a th:href="@{/meeting/list.html}">모임</a></li>
+			        <li><a th:href="@{/product/list.html}">도서관찾기</a></li>
 			        <li><a th:href="@{/chat.html}">1:1문의</a></li>
+			        <li><a th:href="@{/manager/manager.html}">관리자</a></li>
 			    </ul>
 			</div>
 		</div>
