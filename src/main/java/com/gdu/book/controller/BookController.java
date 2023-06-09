@@ -18,5 +18,10 @@ public class BookController {
 	  return "book/booklist";
   }
   
+  @GetMapping("/bookDetail.html")
+  public String movieDetail() {
+	  return "book/bookDetail";
+  }
+  
 
 }
