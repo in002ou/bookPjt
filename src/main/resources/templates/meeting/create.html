@@ -3,17 +3,60 @@
 <head th:replace="~{layout/verticalGnb::head('모임활동')}"></head>
 <script>
 	$(function(){
-		$(document).ready(function(){
+		$(document).ready(function(){	/* 모임 기간과 인원 표시 */
 			var capasity = $('#capasity');
-			var displayValue = $('#displayValue');
+			var displayValue1 = $('#displayValue1');
+			
+			var endDate = $('#endDate');
+			var displayValue2 = $('#displayValue2');
 			
 			capasity.on('input', function(){
-				var value = capasity.val();
-				displayValue.text(value);
+				var value1 = capasity.val();
+				displayValue1.text(value1 + '명');
 			});
-			var initialValue = capasity.val();
-			displayValue.text(initialValue);
+			
+			endDate.on('input', function(){
+				var value2 = endDate.val();
+				displayValue2.text(value2 + '일');
+			})
+			
+			var initialValue1 = capasity.val();
+			displayValue1.text(initialValue1 + '명');
+			
+			var initialValue2 = endDate.val();
+			displayValue2.text(initialValue2 + '일')
 		})
+		
+		$(document).ready(function(){
+			var meetingName = $('#meetingName');
+			var meetingContent = $('#meetingContent');
+			var nameCount = $('#nameCount');
+			var contentCount = $('#contentCount');
+			
+			meetingName.on('input', function(){
+				var value1 = meetingName.val();
+				var count1 = value1.length;
+				nameCount.text(count1 + '/30');
+				if (count1 > 30){
+					nameCount.css('color', 'red');
+				} else {
+					nameCount.css('color', '');
+				}
+			})
+			
+			meetingContent.on('input', function(){
+				var value2 = meetingContent.val();
+				var count2 = value2.length;
+				contentCount.text(count2 + '/1000');
+				if (count2 > 1000){
+					contentCount.css('color', 'red');
+				} else {
+					contentCount.css('color', '');
+				}
+			})
+			
+		})
+		
 		
 	})
 </script>
@@ -24,22 +67,86 @@
 	</div>
 
 	<div class="create_meeting_wrap">
+	
 		<div class="create_meeting">
-			<div>
-				<section id="category" th:field="*{category}">
-				</section>
+		
+			<div class="name">
+				<div>
+					<h2>모임명</h2>
+				</div>
+				<div>
+					<input type="text" maxlength="30" class="meeting_name" name="meetingName" id="meetingName"><!-- 100바이트(30글자 제한) -->
+				</div>
+				<div>
+					<p id="nameCount"></p>
+				</div>
 			</div>
-			<div>
-				<input type="text" maxlength="30" class="meeting_name" name="meetingName" id="meetingName"><!-- 100바이트(30글자 제한) -->
-			</div>
-			<div>
-				<input type="file" id="imageInput" name="image" class="meeting_image">
-			</div>
+			
 			<div class="range_wrap">
-				<input type="range" min="1" max="29" value="1" id="capasity" class="meeting_capasity" name="capasity">
-				<p id="displayValue"></p>
+				<div>
+					<h2>정원</h2>
+				</div>
+				<div>
+					<input type="range" min="1" max="10" value="1" id="capasity" class="meeting_capasity" name="capasity">
+				</div>
+				<div>
+					<p id="displayValue1"></p>
+				</div>
 			</div>
+			
+			<div class="meeting_info">
+				<div>
+					<h2>주제</h2>
+				</div>
+				<div class="category">
+					<select id="category">
+						<option value="book">독서</option>
+						<option value="exercise">운동</option>
+						<option value="etc">기타</option>
+					</select>
+				</div>
+				
+				<div>
+					<h2>대표이미지</h2>
+				</div>
+				<div class="image">
+					<input type="file" id="imageInput" name="image" class="meeting_image">
+				</div>
+			</div>
+			
+			<div class="content">
+				<div>
+					<h2>모임내용</h2>
+				</div>
+				<div>
+					<input type="text" maxlength="1000" class="meeting_content" name="meetingContent" id="meetingContent">
+				</div>
+				<div>
+					<p id="contentCount"></p>
+				</div>
+			</div>
+			
+			<div class="date">
+				<div>
+					<h2>모임기간</h2>
+				</div>
+				<div>
+					<input type="range" min="1" max="29" value="1" id="endDate" class="meeting_date" name="endDate">
+				</div>
+				<div>
+					<p id="displayValue2"></p>
+				</div>
+			</div>
+			
 		</div>
+		
+		
+	</div>
+
+	
+	
+	<div class="footer">
+		<div th:replace="~{layout/footer::foot}"></div>
 	</div>
 
 </body>
