@@ -16,6 +16,11 @@ public class MeetingController {
 		return "meeting/list";
 	}
 	
+	@GetMapping("/create.html")
+	public String create() {
+		return "meeting/create";
+	}
+	
 	@GetMapping("/screen.html")
 	public String screen() {
 		return "meeting/screen";
