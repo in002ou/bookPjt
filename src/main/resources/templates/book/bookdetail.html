@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/header::head('환영합니다')}"></head>
+
+<style>
+	button {
+    margin: 20px;
+	}
+	.w-btn {
+		cursor: pointer;
+	    position: relative;
+	    border: none;
+	    display: inline-block;
+	    padding: 15px 30px;
+	    border-radius: 15px;
+	    font-family: "paybooc-Light", sans-serif;
+	    text-decoration: none;
+	    font-weight: 600;
+	    transition: 0.25s;
+	}
+	.w-btn-outline {
+	    position: relative;
+	    padding: 15px 30px;
+	    border-radius: 15px;
+	    font-family: "paybooc-Light", sans-serif;
+	    text-decoration: none;
+	    font-weight: 600;
+	    transition: 0.25s;
+	}
+	
+	.w-btn-indigo {
+	    background-color: rgb(101, 128, 207);
+	    color: black;
+	}
+	
+	.w-btn-indigo-outline {
+	    border: 3px solid rgb(101, 128, 207);
+	    color: black;
+	}
+	
+	.w-btn-indigo-outline:hover {
+	    color: black;
+	    background: rgb(101, 128, 207);
+	}
+	
+	
+	img{
+		height:80%;
+		width: 90%;
+	}
+	textarea {
+		width: 80%;
+		height: 100px;
+		padding: 10px;
+		box-sizing: border-box;
+		border: solid 2px #1E90FF;
+		border-radius: 5px;
+		font-size: 16px;
+		resize: both;
+	}
+
+	.bookDetailAll {
+		min-height: 700px;
+		margin:170px 50px 0px 50px;
+		border:1px solid black;
+	}
+	.bookDetailandPayment{
+		display: flex;
+		width:100%;
+		height: 400px;
+		margin-top:10px;
+	
+	}
+	.bookImage {
+		height: 100%;
+		width: 300px;
+		margin-left:10px;
+	} 
+	.bookDetail {
+    	width: 50%;
+    	height: 80%;
+    	border:1px solid black;
+	    text-align: left;
+	}
+	.bookDetail > div {
+		height: 10%;
+	    width: 100%;
+	    text-align: left;
+	}
+	.payment {
+    	width: 20%;
+    	float: right;
+    	height: 30%;
+    	margin: 60px 30px 0px 10px;
+	}
+	.reviewBtnandContent {
+		display: flex;
+	}
+	
+	
+</style>
+<body>
+
+	<div th:replace="~{layout/header::gnb}"></div>
+		<div class="bookDetailAll">
+			<div class="bookDetailandPayment">
+				<div class="bookImage"><img src="https://img.ypbooks.co.kr/upload/img/book/999/101232999.jpg"></div>
+				<div class="bookDetail">
+					<div>제목 : 흔한남매</div>
+					<div>저자 : 홍길동</div>
+					<div>상세설명 : 넝마ㅣㅓ암너아ㅣㅁ너아ㅣㅁ너아ㅣㅓㅁ나ㅣ;ㅇㅁㄴㅇㅁ넝ㅁ니어ㅏ먼아ㅣㅓㅁㄴ아ㅣㅁ너아ㅣ</div>
+				</div>
+				<div class="payment">
+					<form action="@{/cart/cart.do}">
+						<button class="w-btn w-btn-indigo">장바구니 담기</button>
+					</form>
+				</div>
+			</div>	
+			<hr>
+			<form method="post" th:action="@{/book/bookReviewadd.do}">
+				<div class="bookReview">
+					<strong>한줄평 등록</strong>
+					<div class="reviewBtnandContent">
+				    	<textarea id="review" name="review" rows="4" cols="50" placeholder="한줄평을 입력해주세요!"></textarea>
+				  	</div>
+					<div>
+					    <label>별점:</label>
+					    <input type="radio" id="star5" name="rating" value="1">
+					    <label for="star5">★</label>
+					    <input type="radio" id="star4" name="rating" value="2">
+					    <label for="star4">★★</label>
+					    <input type="radio" id="star3" name="rating" value="3">
+					    <label for="star3">★★★</label>
+					    <input type="radio" id="star2" name="rating" value="4">
+					    <label for="star2">★★★★</label>
+					    <input type="radio" id="star1" name="rating" value="5">
+					    <label for="star1">★★★★★</label>
+					</div>
+				    	<button class="w-btn w-btn-indigo">등록</button>
+				</div>
+			</form>
+		</div>
+	<div th:replace="~{layout/footer::foot}"></div>
+	
+</body>
+<script>
+	 
+</script>
+</html>
