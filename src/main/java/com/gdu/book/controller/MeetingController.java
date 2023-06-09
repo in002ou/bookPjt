@@ -2,7 +2,10 @@ package com.gdu.book.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.gdu.book.service.MeetingService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -11,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/meeting")
 public class MeetingController {
 
+	private MeetingService meetingService;
+	
 	@GetMapping("/list.html")
 	public String list() {
 		return "meeting/list";
@@ -21,9 +26,14 @@ public class MeetingController {
 		return "meeting/create";
 	}
 	
-	@GetMapping("/screen.html")
+	@PostMapping("/write.do")
+	public String write() {
+		return "redirect:/meeting/list.html";
+	}
+	
+	@GetMapping("/detail.html")
 	public String screen() {
-		return "meeting/screen";
+		return "meeting/detail";
 	}
 	
 }
