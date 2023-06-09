@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/header::head('환영합니다')}"></head>
+<script>
+	
+</script>
+<style>
+	.bookListAll {
+		min-height: 700px;
+		margin:170px 50px 0px 50px;
+		border:1px solid black;
+	}
+	
+	
+</style>
+<body>
+
+	<div th:replace="~{layout/header::gnb}"></div>
+		<div class="bookListAll">
+			<div class="book">
+			<a th:href="@{/book/bookDetail.html}">도서 상세보기</a>
+				<hr>
+			</div>
+		</div>
+	<div th:replace="~{layout/footer::foot}"></div>
+	
+</body>
+</html>

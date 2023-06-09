@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace는 @Mapper를 지정한다. -->
+<mapper namespace="com.gdu.book.mapper.BookMapper">
+
+	<insert id="insertBookReview" parameterType="BookReviewDTO">
+		INSERT INTO BOOK_REVIEW_T(
+			  USER_NO
+			, BOOK_NO 
+			, BOOK_REVIEW
+			, BOOK_RATING
+			, BOOK_REVIEW_CREATED_AT
+		) VALUES (
+			  #{userDTO.userNo}
+			, #{bookDTO.bookNo}
+			, #{bookReview}
+			, #{bookRating}
+			, NOW()
+		)
+	</insert>
+	
+</mapper>
