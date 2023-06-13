@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/header::head('친목')}"></head>
+<script>
+
+</script>
+<style>
+    /* 페이지 전체를 감싸는 컨테이너 */
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        height: 100vh;
+    }
+
+    /* 왼쪽 상단 영역 */
+    .top-left {
+        width: 50%;
+        height: 50%;
+        background-color: #f0f0f0;
+    }
+
+    /* 오른쪽 상단 영역 */
+    .top-right {
+        width: 50%;
+        height: 50%;
+        background-color: #e0e0e0;
+    }
+
+    /* 왼쪽 하단 영역 */
+    .bottom-left {
+        width: 50%;
+        height: 50%;
+        background-color: #d0d0d0;
+    }
+
+    /* 오른쪽 하단 영역 */
+    .bottom-right {
+        width: 50%;
+        height: 50%;
+        background-color: #c0c0c0;
+    }
+
+</style>
+</head>
+<body>
+
+	<div th:replace="~{layout/header::gnb}"></div>
+
+    <div class="container">
+    
+        <div class="top-left">
+        	
+        </div>
+        
+        <div class="top-right"></div>
+        
+        <div class="bottom-left"></div>
+        
+        <div class="bottom-right"></div>
+        
+    </div>
+
+    <div th:replace="~{layout/footer::foot}"></div>
+
+</body>
+</html>
