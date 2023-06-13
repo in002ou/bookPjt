@@ -12,5 +12,7 @@ import lombok.NoArgsConstructor;
 public class CartDTO {
  private int cartNo;
  private UserDTO userDTO;
+ private BookDTO bookDTO;
+ private int count;
  private Date cartCreatedAt;
 }

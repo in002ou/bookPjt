@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.book.service.BookService;
 
@@ -25,13 +26,14 @@ public class BookController {
   }
   
   @GetMapping("/bookDetail.html")
-  public String movieDetail() {
+  public String movieDetail(HttpServletRequest request, Model model) {
+	  bookService.getBookDetail(request, model);
 	  return "book/bookDetail";
   }
   @PostMapping("/bookReviewadd.do")
-  public String bookReviewadd(Model model, HttpServletRequest request) {
-	  model.addAttribute("addResult", bookService.addBookReview(request));
-	  return "book/bookDetail";
+  public String bookReviewadd(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+	  redirectAttributes.addFlashAttribute("addResult", bookService.addBookReview(request));
+	  return "redirect:/book/bookDetail.html?bookNo=" + request.getParameter("bookNo");
   }
   
 
