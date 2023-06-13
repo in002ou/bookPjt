@@ -91,7 +91,11 @@
     	width: 20%;
     	float: right;
     	height: 30%;
-    	margin: 60px 30px 0px 10px;
+    	margin: 0 auto;
+    	display: flex;
+     	flex-direction: column;
+      	align-items: center;
+      	text-align: center;
 	}
 	.reviewBtnandContent {
 		display: flex;
@@ -104,14 +108,34 @@
 	<div th:replace="~{layout/header::gnb}"></div>
 		<div class="bookDetailAll">
 			<div class="bookDetailandPayment">
-				<div class="bookImage"><img src="https://img.ypbooks.co.kr/upload/img/book/999/101232999.jpg"></div>
+				<div class="bookImage"><img th:src="${bookDetail.bookImage}"></div>
 				<div class="bookDetail">
-					<div>제목 : 흔한남매</div>
-					<div>저자 : 홍길동</div>
-					<div>상세설명 : 넝마ㅣㅓ암너아ㅣㅁ너아ㅣㅁ너아ㅣㅓㅁ나ㅣ;ㅇㅁㄴㅇㅁ넝ㅁ니어ㅏ먼아ㅣㅓㅁㄴ아ㅣㅁ너아ㅣ</div>
+					<div>
+						<strong>제목 : </strong>
+						<strong th:text="${bookDetail.bookTitle}"></strong>
+					</div>
+					<div>
+						<strong>저자 : </strong>
+						<strong th:text="${bookDetail.bookAuthor}"></strong>
+					</div>
+					<div>
+						<strong>가격 : </strong>
+						<strong th:text="${bookDetail.bookPrice}"></strong>
+					</div>
+					<div>
+						<strong>출간일자 : </strong>
+						<strong th:text="${bookDetail.bookAt}"></strong>
+					</div>
+					<div>
+						<strong>줄거리 : </strong>
+						<strong th:text="${bookDetail.bookDescription}"></strong>
+					</div>
 				</div>
 				<div class="payment">
-					<form action="@{/cart/cart.do}">
+					<form method="post" th:action="@{/cart/addCart.do}">
+						<input type="hidden" value="1" name="userNo">
+						<input type="hidden" th:value="${bookDetail.bookNo}" name="bookNo">
+						<div><input type="number" id="count" min="1" max="10" value="1" name="count">개</div>
 						<button class="w-btn w-btn-indigo">장바구니 담기</button>
 					</form>
 				</div>
@@ -122,6 +146,7 @@
 					<strong>한줄평 등록</strong>
 					<div class="reviewBtnandContent">
 				    	<textarea id="review" name="review" rows="4" cols="50" placeholder="한줄평을 입력해주세요!"></textarea>
+					    <button class="w-btn w-btn-indigo">등록</button>
 				  	</div>
 					<div>
 					    <label>별점:</label>
@@ -136,14 +161,36 @@
 					    <input type="radio" id="star1" name="rating" value="5">
 					    <label for="star1">★★★★★</label>
 					</div>
-				    	<button class="w-btn w-btn-indigo">등록</button>
+					<input type="hidden" th:value="${bookDetail.bookNo}" name="bookNo">
 				</div>
 			</form>
+			<div>
+				<th:block th:each="review,vs:${bookReview}">
+					<strong th:text="${review.userDTO.userId}"></strong>
+					<strong th:text="${review.bookReview}"></strong>
+					<th:block th:if="${review.bookRating == 1}">★</th:block>
+					<th:block th:if="${review.bookRating == 2}">★★</th:block>
+					<th:block th:if="${review.bookRating == 3}">★★★</th:block>
+					<th:block th:if="${review.bookRating == 4}">★★★★</th:block>
+					<th:block th:if="${review.bookRating == 5}">★★★★★</th:block>
+				</th:block>
+			</div>
 		</div>
 	<div th:replace="~{layout/footer::foot}"></div>
 	
 </body>
 <script>
+	$(function(){
+		let addResult = /*[[${addResult}]]*/ null;
+		
+		if(addResult != null){
+			if(addResult == 2){
+				alert('한줄평이 등록되었습니다.');
+			} else {
+				alert('한줄평이 등록되지 않았습니다.');
+			}
+		}
+	})
 	 
 </script>
 </html>

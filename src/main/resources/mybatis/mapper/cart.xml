@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace는 @Mapper를 지정한다. -->
+<mapper namespace="com.gdu.book.mapper.CartMapper">
+
+	<resultMap type="CartDTO" id="CartMap">
+		<id column="CART_NO" property="cartNo"/>
+		<result column="COUNT" property="count"/>
+		<association javaType="UserDTO" property="userDTO">
+			<id column="USER_NO" property="userNo"/>
+		</association>
+		<association javaType="BookDTO" property="bookDTO">
+			<id column="BOOK_NO" property="cartNo"/>
+			<result column="BOOK_TITLE" property="bookTitle"/>
+			<result column="BOOK_PRICE" property="bookPrice"/>
+			<result column="BOOK_AT" property="bookAt"/>
+			<result column="BOOK_AUTHOR" property="bookAuthor"/>
+			<result column="BOOK_IMAGE" property="bookImage"/>
+		</association>
+	</resultMap>
+	
+	<insert id="insertCart" parameterType="CartDTO">
+		INSERT INTO CART_T(
+			  USER_NO
+			, BOOK_NO
+			, COUNT
+			, CART_CREATED_AT
+		) VALUES (
+			#{userDTO.userNo}
+		  , #{bookDTO.bookNo}
+		  , #{count}
+		  , NOW()
+		)
+	</insert>
+	
+	<select id="selectCartList" parameterType="int" resultMap="CartMap">
+		SELECT C.COUNT, B.BOOK_TITLE, B.BOOK_PRICE, B.BOOK_IMAGE 
+		  FROM BOOK_T B INNER JOIN CART_T C 
+		    ON B.BOOK_NO = C.BOOK_NO
+		 WHERE USER_NO = #{userNo}
+	</select>
+	
+	
+	
+</mapper>

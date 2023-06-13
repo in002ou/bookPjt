@@ -5,12 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
 public class CartDetailDTO {
- private int cartDetailNo;
- private CartDTO cartDTO;
- private BookDTO bookDTO;
- private int cartDetailCount;
+ //private int cartDetailNo;
+ //private CartDTO cartDTO;
+// private BookDTO bookDTO;
+ //private int cartDetailCount;
 }

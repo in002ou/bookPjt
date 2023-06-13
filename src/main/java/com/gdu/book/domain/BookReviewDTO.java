@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookReviewDTO {
- private BookDTO bookDTO;
- private UserDTO userDTO;
- private String bookReview;
- private double bookRating;
- private Date bookReviewCreatedAt;
+	private int bookReviewNo;
+	private BookDTO bookDTO;
+	private UserDTO userDTO;
+	private String bookReview;
+	private double bookRating;
+	private Date bookReviewCreatedAt;
 }
