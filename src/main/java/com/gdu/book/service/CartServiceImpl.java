@@ -22,7 +22,7 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public int addCart(HttpServletRequest request, Model model) {
-		int bookNo = Integer.parseInt(request.getParameter("bookNo"));
+		String bookNo = request.getParameter("bookNo");
 		int userNo = Integer.parseInt(request.getParameter("userNo"));
 		int count = Integer.parseInt(request.getParameter("count"));
 		BookDTO bookDTO = new BookDTO();

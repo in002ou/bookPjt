@@ -33,7 +33,7 @@ public class BookServiceImpl implements BookService {
 	public int addBookReview(HttpServletRequest request) {
 		String review = request.getParameter("review");
 		int rating = Integer.parseInt(request.getParameter("rating"));
-		int bookNo = Integer.parseInt(request.getParameter("bookNo"));
+		String bookNo = request.getParameter("bookNo");
 		
 		BookReviewDTO bookReviewDTO = new BookReviewDTO();
 		UserDTO userDTO = new UserDTO();
