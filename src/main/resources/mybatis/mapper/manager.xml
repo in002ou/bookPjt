@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace는 @Mapper를 지정한다. -->
+<mapper namespace="com.gdu.book.mapper.ManagerMapper">
+
+	<insert id="addBook" parameterType="BookDTO">
+		INSERT INTO BOOK_T (BOOK_NO, BOOK_TITLE, BOOK_PRICE, BOOK_AT, BOOK_AUTHOR, BOOK_IMAGE, BOOK_DESCRIPTION)
+			VALUES (#{bookNo}, #{bookTitle}, #{bookPrice}, #{bookAt}, #{bookAuthor}, #{bookImage}, #{bookDescription})
+	</insert>
+	
+	<insert id="addQna" parameterType="QnaDTO" useGeneratedKeys="true" keyProperty="qnaNo">
+		INSERT INTO QNA_T (USER_NO, TITLE, ANSWER, QNA_STATE, ANSWER_AT, DEPTH, GROUP_NO)
+			VLAUES (#{userNo}, #{title}, #{answer}, #{qnaState}, NOW(), 0, 0)
+	</insert>
+	
+	<update id="addQnaGroupNo" parameterType="int">
+		UPDATE QNA_T
+       	   SET GROUP_NO = #{qnaNo}
+     	 WHERE QNA_NO = #{qnaNo}
+	</update>
+	
+</mapper>
