@@ -10,8 +10,8 @@
 
 	
 	<div th:replace="~{layout/header::gnb}"></div>
-	
 	<div class="queryBook">
+		<a th:href="@{/manager/QnA.html}">1:1문의</a>
 		<form id="frmAddBook">
 	  		<input type="text" name="query" id="query">
 	  		<span><input type="button" id="queryBook" value="검색하기"> </span>
@@ -36,14 +36,12 @@
 		success: function(resData){
 			$('#bookList').empty();
 				var str = '';
-				console.log(resData);
+				console.log(resData.items[0].isbn);
 			$.each(resData.items, function(i, book){
 				// $('#book').attr('th:action','@{/manager/addBook.do}');
-				str += '<form class="book" th:action="@{/manager/addBook.do}" method="get">' + '<image src="' + book.image + '" width="200px">';
+				str += '<form class="book">' + '<image src="' + book.image + '" width="200px">';
 				str += '<br>';
-				str += book.title + '<input type="button" class="addBook" value="등록하기">'; // str += book['title']
 				str += '</div>';
-				str += '<hr>';
 				str += '<input type="hidden" name="bookNo" value="' + book.isbn + '">';
 				str += '<input type="hidden" name="bookTitle" value="' + book.title + '">';
 				str += '<input type="hidden" name="bookPrice" value="' + book.discount + '">';
@@ -51,6 +49,8 @@
 				str += '<input type="hidden" name="bookAuthor" value="' + book.author + '">';
 				str += '<input type="hidden" name="bookImage" value="' + book.image + '">';
 				str += '<input type="hidden" name="bookDescription" value="' + book.description + '">';
+				str += book.title + '<input type="button" class="addBook" value="등록하기">'; // str += book['title']
+				str += '<hr>';
 				str += '</form>';
 				})
 				$('#bookList').append(str);
@@ -61,22 +61,29 @@
   	
   	
   	function fnAddBook(){
-  		$('.addBook').on('click', function(){
+  		$(document).on('click', '.addBook', function(){
 	  		$.ajax({
 	  			type: 'get',
 	  			url: '/manager/addBook.do',
-	  			data: $('.book').serialize(),
+	  			data: $(this).parent('.book').serialize(),
 	  			dataType: 'json',
 	  			success: function(resData){
+	  			console.log(resData.addResult);
+	  				if(resData.addResult == 1){
 	  				alert('도서가 등록되었습니다.');
-	  				
-	  			}
+	  				} else {
+	  					alert('도서등록에 실패했습니다.');
+	  				}
+	  			},
+				error: function(qwe){
+					alert('이미 등록된 도서입니다.');
+				}
 	  		})
   		})
   	}
   	
-	fnAddBook();
 	fnQueryBook();
+	fnAddBook();
   </script>
 
 </body>
