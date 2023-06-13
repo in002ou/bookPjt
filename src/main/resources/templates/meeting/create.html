@@ -27,7 +27,7 @@
 			displayValue2.text(initialValue2 + '일')
 		})
 		
-		$(document).ready(function(){
+		$(document).ready(function(){	/* 글자 수 표시 */
 			var meetingName = $('#meetingName');
 			var meetingContent = $('#meetingContent');
 			var nameCount = $('#nameCount');
@@ -57,9 +57,45 @@
 			
 		})
 		
+	  $(document).ready(function() {
+		    $('#meetingFrm').submit(function(event) {
+		      var meetingContent = $('#meetingContent').val().trim();
+		      var meetingName = $('#meetingName').val().trim();
+	
+		      if (meetingContent === '' || meetingName === '') {
+		        alert('값을 입력해 주세요.');
+		        event.preventDefault();
+		      }
+	
+		    });
+		  });
 		
 	})
+	function fnImageCheck(this1){
+		let maxSize = 1024*1024*5;
+		
+		let image = this1.image;
+		if(image.size > maxSize){
+			alert('이미지 파일의 최대 크기는 05MB입니다.');
+			$(this1).val('');
+			return;
+		}
+		
+	}
 </script>
+<style>
+    .gnb {
+        float: left;
+        width: 20%;
+        background-color: #f2f2f2;
+    }
+
+    .create_meeting_wrap {
+        margin-left: 20%;
+        background-color: #f5f5dc;
+        padding: 20px;
+    }
+</style>
 <body>
 
 	<div class="gnb">
@@ -70,7 +106,8 @@
 	
 		<div class="create_meeting">
 		
-			<form method="post" th:action="@{/meeting/write.do}">
+			<form method="post" th:action="@{/meeting/write.do}" id="meetingFrm">
+				<input type="hidden" name="userNo" th:value="${session.userNo}">
 				<div class="name">
 					<div>
 						<h2>모임명</h2>
@@ -111,7 +148,8 @@
 						<h2>대표이미지</h2>
 					</div>
 					<div class="image">
-						<input type="file" id="imageInput" name="image" class="meeting_image">
+						<label for="image">이미지선택</label>
+						<input type="file" id="image" name="image" class="meeting_image" accept="image/*" onchange="fnImageCheck(this)">
 					</div>
 				</div>
 				
