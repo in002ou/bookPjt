@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class MvcController {
 
   
-  @GetMapping("/")
+  @GetMapping({"/", "/index.do"})
   public String welcom(Model model) {
     return "index";
   }
