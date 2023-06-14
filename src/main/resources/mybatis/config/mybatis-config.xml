@@ -32,6 +32,7 @@
 		<typeAlias alias="UserLeaveDTO" type="com.gdu.book.domain.UserLeaveDTO" />
 		<typeAlias alias="UserRecommenedDTO" type="com.gdu.book.domain.UserRecommenedDTO" />
 		<typeAlias alias="UserSleepDTO" type="com.gdu.book.domain.UserSleepDTO" />
+		<typeAlias alias="SummernoteImageDTO" type="com.gdu.book.domain.SummernoteImageDTO"/> 
 	</typeAliases>
 
 </configuration>

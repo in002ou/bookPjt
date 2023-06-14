@@ -6,20 +6,93 @@
 <!-- namespace는 @Mapper를 지정한다. -->
 <mapper namespace="com.gdu.book.mapper.ManagerMapper">
 
+	<resultMap type="QnaDTO" id="QnaMap">
+		<id column="QNA_NO" property="qnaNo"/>
+		<result column="TITLE" property="title"/>
+		<result column="ANSWER" property="answer"/>
+		<result column="QNA_STATE" property="qnaState"/>
+		<result column="ANSWER_AT" property="answerAt"/>
+		<result column="DEPTH" property="depth"/>
+		<result column="GROUP_NO" property="groupNo"/>
+		<association javaType="UserDTO" property="userDTO">
+			<id column="USER_NO" property="userNo"/>
+			<result column="USER_ID" property="userId"/>
+		</association>
+	</resultMap>
+
 	<insert id="addBook" parameterType="BookDTO">
 		INSERT INTO BOOK_T (BOOK_NO, BOOK_TITLE, BOOK_PRICE, BOOK_AT, BOOK_AUTHOR, BOOK_IMAGE, BOOK_DESCRIPTION)
 			VALUES (#{bookNo}, #{bookTitle}, #{bookPrice}, #{bookAt}, #{bookAuthor}, #{bookImage}, #{bookDescription})
 	</insert>
 	
+	<select id="getQnaCount" resultType="int">
+    	SELECT COUNT(*)
+      	  FROM QNA_T
+  	</select>
+	
+	<select id="selectQnaList" resultMap="QnaMap" parameterType="Map">
+		SELECT A.QNA_NO, A.USER_ID, A.TITLE, A.ANSWER, A.QNA_STATE, A.ANSWER_AT, A.DEPTH, A.GROUP_NO
+      	  FROM (SELECT Q.QNA_NO, U.USER_ID, Q.TITLE, Q.ANSWER, Q.QNA_STATE, Q.ANSWER_AT, Q.DEPTH, Q.GROUP_NO
+                  FROM QNA_T Q INNER JOIN USER_T U
+                    ON Q.USER_NO = U.USER_NO) A
+     	 ORDER BY GROUP_NO DESC
+     	 LIMIT #{begin}, #{recordPerPage}
+	</select>  
+	
 	<insert id="addQna" parameterType="QnaDTO" useGeneratedKeys="true" keyProperty="qnaNo">
-		INSERT INTO QNA_T (USER_NO, TITLE, ANSWER, QNA_STATE, ANSWER_AT, DEPTH, GROUP_NO)
-			VLAUES (#{userNo}, #{title}, #{answer}, #{qnaState}, NOW(), 0, 0)
+		INSERT INTO QNA_T (USER_NO, TITLE, QNA_STATE, DEPTH, GROUP_NO)
+			VALUES (#{userDTO.userNo}, #{title}, #{qnaState}, 0, 0)
 	</insert>
 	
-	<update id="addQnaGroupNo" parameterType="int">
+	<update id="addQnaGroupNo" parameterType="QnaDTO">
 		UPDATE QNA_T
        	   SET GROUP_NO = #{qnaNo}
      	 WHERE QNA_NO = #{qnaNo}
 	</update>
+	
+	<update id="answerQna" parameterType="QnaDTO">
+		UPDATE QNA_T
+		   SET ANSWER = #{answer}, DEPTH = #{depth}, GROUP_NO = #{groupNo}, QNA_STATE = 2, ANSWER_AT = NOW()
+		 WHERE QNA_NO = #{qnaNo}
+	</update>
+	
+	<delete id="deleteQna" parameterType="int">
+		DELETE FROM QNA_T
+		 WHERE QNA_NO = #{qnaNo}
+	</delete>
+	
+	<insert id="addAnmt" parameterType="AnnouncementDTO" useGeneratedKeys="true" keyProperty="anmNo">
+		INSERT INTO ANNOUNCEMENT_T (TITLE, ANM_CONTENT, REGISTRATION, IMAGE, ANM_COUNT)
+		VALUES (#{title}, #{anmContent}, NOW(), #{image}, #{anmCount})
+	</insert>
+	
+	<select id="selectAnmt" parameterType="Map" resultType="AnnouncementDTO">
+    SELECT A.ANM_NO, A.TITLE, A.ANM_CONTENT, A.REGISTRATION, A.IMAGE, A.ANM_COUNT
+      FROM (SELECT ANM_NO, TITLE, ANM_CONTENT, REGISTRATION, IMAGE, ANM_COUNT
+              FROM ANNOUNCEMENT_T) A
+     ORDER BY ANM_NO DESC
+     LIMIT #{begin}, #{recordPerPage}
+  	</select> 
+	
+	<select id="getAnmtCount" resultType="int">
+    	SELECT COUNT(*)
+      	  FROM ANNOUNCEMENT_T
+  	</select>
+  	
+  	<select id="anmtDetail" parameterType="int" resultType="AnnouncementDTO">
+  		SELECT ANM_NO, TITLE, ANM_CONTENT, REGISTRATION, IMAGE, ANM_COUNT 
+  		  FROM ANNOUNCEMENT_T
+  		 WHERE ANM_NO = #{anmNo}
+  	</select>
+  	
+  	<insert id="addSummernoteImage" parameterType="SummernoteImageDTO">
+    	INSERT INTO SUMMERNOTE_IMAGE_T (
+        	FILESYSTEM_NAME
+      	  , BLOG_NO
+    		) VALUES (
+        	#{filesystemName}
+      	  , #{blogNo}
+    		)
+ 	 </insert>
 	
 </mapper>

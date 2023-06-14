@@ -62,4 +62,8 @@ public class MyFileUtil {
     return "/storage" + sep + date.getYear() + sep + String.format("%02d", date.getMonthValue()) + sep + String.format("%02d", date.getDayOfMonth());
   }
   
+  public String getSummernoteImagePath() {
+	  return "/storage" + sep + "summernote";
+  }
+  
 }
