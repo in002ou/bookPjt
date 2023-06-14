@@ -1,6 +1,8 @@
 package com.gdu.book.domain;
 
-import java.sql.Date;
+
+
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookDTO {
-	private int bookNo;
+	private String bookNo;
 	private String bookTitle;
 	private int bookPrice;
 	private Date bookAt;

@@ -6,6 +6,31 @@
 <!-- namespace는 @Mapper를 지정한다. -->
 <mapper namespace="com.gdu.book.mapper.BookMapper">
 
+	<resultMap type="BookReviewDTO" id="BookReviewMap">
+		<id column="BOOK_REVIEW_NO" property="bookReviewNo"/>
+		<result column="BOOK_REVIEW" property="bookReview"/>
+		<result column="BOOK_RATING" property="bookRating"/>
+		<result column="BOOK_REVIEW_CREATED_AT" property="bookReviewCreatedAt"/>
+		<association javaType="UserDTO" property="userDTO">
+			<id column="USER_NO" property="userNo"/>
+			<result column="USER_ID" property="userId"/>
+		</association>
+	</resultMap>
+	
+
+
+	<select id="selectBookDetail" resultType="BookDTO">
+		SELECT *
+		FROM BOOK_T
+	</select>
+	
+	<select id="selectBookReview" parameterType="int" resultMap="BookReviewMap">
+		SELECT B.BOOK_REVIEW_NO, B.BOOK_REVIEW, B.BOOK_RATING, U.USER_ID
+		  FROM USER_T U INNER JOIN BOOK_REVIEW_T B
+		    ON U.USER_NO = B.USER_NO
+		 WHERE BOOK_NO = #{bookNo} 	 
+	</select>
+
 	<insert id="insertBookReview" parameterType="BookReviewDTO">
 		INSERT INTO BOOK_REVIEW_T(
 			  USER_NO
@@ -21,5 +46,6 @@
 			, NOW()
 		)
 	</insert>
+	
 	
 </mapper>
