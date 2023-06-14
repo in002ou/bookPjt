@@ -4,14 +4,14 @@
 <script>
 	$(function(){
 		$(document).ready(function(){	/* 모임 기간과 인원 표시 */
-			var capasity = $('#capasity');
+			var capacity = $('#capacity');
 			var displayValue1 = $('#displayValue1');
 			
 			var endDate = $('#endDate');
 			var displayValue2 = $('#displayValue2');
 			
-			capasity.on('input', function(){
-				var value1 = capasity.val();
+			capacity.on('input', function(){
+				var value1 = capacity.val();
 				displayValue1.text(value1 + '명');
 			});
 			
@@ -20,7 +20,7 @@
 				displayValue2.text(value2 + '일');
 			})
 			
-			var initialValue1 = capasity.val();
+			var initialValue1 = capacity.val();
 			displayValue1.text(initialValue1 + '명');
 			
 			var initialValue2 = endDate.val();
@@ -106,8 +106,10 @@
 	
 		<div class="create_meeting">
 		
-			<form method="post" th:action="@{/meeting/write.do}" id="meetingFrm">
+			<form enctype="multipart/form-data" method="post" th:action="@{/meeting/write.do}" id="meetingFrm">
+			
 				<input type="hidden" name="userNo" th:value="${session.userNo}">
+				
 				<div class="name">
 					<div>
 						<h2>모임명</h2>
@@ -125,7 +127,7 @@
 						<h2>정원</h2>
 					</div>
 					<div>
-						<input type="range" min="1" max="10" value="1" id="capasity" class="meeting_capasity" name="capasity">
+						<input type="range" min="1" max="10" value="1" id="capacity" class="meeting_capacity" name="capacity">
 					</div>
 					<div>
 						<p id="displayValue1"></p>
@@ -137,7 +139,7 @@
 						<h2>주제</h2>
 					</div>
 					<div class="category">
-						<select id="category">
+						<select id="category" name="category">
 							<option value="book">독서</option>
 							<option value="exercise">운동</option>
 							<option value="etc">기타</option>
