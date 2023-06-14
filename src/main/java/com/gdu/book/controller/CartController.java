@@ -2,6 +2,7 @@ package com.gdu.book.controller;
 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,14 +25,25 @@ public class CartController {
 	@GetMapping("/cartList.do")
 	public String cartList(HttpServletRequest request, Model model) {
 		cartService.getCartList(request, model);
+		
 		return "cart/cartlist";
 	}
 	
 	@PostMapping("/addCart.do")
-	public String addcart(HttpServletRequest request, RedirectAttributes redirectAttributes,Model model) {
-		redirectAttributes.addFlashAttribute("addResult", cartService.addCart(request, model));
+	public String addcart(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("addResult", cartService.addCart(request));
 		
 		return "redirect:/cart/cartList.do?userNo=" + request.getParameter("userNo"); 
+	}
+	
+	@PostMapping("/removeCart.do")
+	public void removeCart(HttpServletRequest request, HttpServletResponse response) {
+		cartService.removeCart(request, response);
+		
+	}
+	@GetMapping("/countDown.do")
+	public void countDown(HttpServletRequest request, HttpServletResponse response) {
+		cartService.countDown(request, response);
 	}
   
   

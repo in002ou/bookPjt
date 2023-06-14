@@ -21,11 +21,12 @@ public class BookController {
   private final BookService bookService; 
 	
   @GetMapping("/bookList.html")
-  public String movieList() {
+  public String movieList(HttpServletRequest request, Model model) {
+	  bookService.getBookList(request, model);
 	  return "book/booklist";
   }
   
-  @GetMapping("/bookDetail.html")
+  @GetMapping("/bookDetail.do")
   public String movieDetail(HttpServletRequest request, Model model) {
 	  bookService.getBookDetail(request, model);
 	  return "book/bookDetail";
@@ -33,7 +34,12 @@ public class BookController {
   @PostMapping("/bookReviewadd.do")
   public String bookReviewadd(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 	  redirectAttributes.addFlashAttribute("addResult", bookService.addBookReview(request));
-	  return "redirect:/book/bookDetail.html?bookNo=" + request.getParameter("bookNo");
+	  return "redirect:/book/bookDetail.do?bookNo=" + request.getParameter("bookNo");
+  }
+  @PostMapping("/deleteReview.do")
+  public String deleteReview(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+	  redirectAttributes.addFlashAttribute("deleteResult", bookService.deleteBookReview(request));
+	  return "redirect:/book/bookDetail.do?bookNo=" + request.getParameter("bookNo");
   }
   
 

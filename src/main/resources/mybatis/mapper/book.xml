@@ -8,6 +8,7 @@
 
 	<resultMap type="BookReviewDTO" id="BookReviewMap">
 		<id column="BOOK_REVIEW_NO" property="bookReviewNo"/>
+		<result column="BOOK_NO" property="bookNo"/>
 		<result column="BOOK_REVIEW" property="bookReview"/>
 		<result column="BOOK_RATING" property="bookRating"/>
 		<result column="BOOK_REVIEW_CREATED_AT" property="bookReviewCreatedAt"/>
@@ -17,21 +18,26 @@
 		</association>
 	</resultMap>
 	
-
-
-	<select id="selectBookDetail" resultType="BookDTO">
-		SELECT *
+	
+	<select id="selectBookList" resultType="BookDTO">
+		SELECT BOOK_NO, BOOK_TITLE, BOOK_PRICE, BOOK_AT, BOOK_AUTHOR, BOOK_IMAGE, BOOK_DESCRIPTION
 		FROM BOOK_T
 	</select>
+
+	<select id="selectBookDetail" parameterType="String" resultType="BookDTO">
+		SELECT *
+		  FROM BOOK_T
+		 WHERE BOOK_NO = #{bookNo}
+	</select>
 	
-	<select id="selectBookReview" parameterType="int" resultMap="BookReviewMap">
-		SELECT B.BOOK_REVIEW_NO, B.BOOK_REVIEW, B.BOOK_RATING, U.USER_ID
+	<select id="selectBookReview" parameterType="String" resultMap="BookReviewMap">
+		SELECT B.BOOK_REVIEW_NO, B.BOOK_NO, B.BOOK_REVIEW, B.BOOK_RATING, U.USER_ID, B.BOOK_REVIEW_CREATED_AT
 		  FROM USER_T U INNER JOIN BOOK_REVIEW_T B
 		    ON U.USER_NO = B.USER_NO
 		 WHERE BOOK_NO = #{bookNo} 	 
 	</select>
 
-	<insert id="insertBookReview" parameterType="BookReviewDTO">
+	<insert id="insertBookReview" parameterType="BookReviewDTO" useGeneratedKeys="true" keyProperty="bookReviewNo">
 		INSERT INTO BOOK_REVIEW_T(
 			  USER_NO
 			, BOOK_NO 
@@ -40,12 +46,18 @@
 			, BOOK_REVIEW_CREATED_AT
 		) VALUES (
 			  #{userDTO.userNo}
-			, #{bookDTO.bookNo}
+			, #{bookNo}
 			, #{bookReview}
 			, #{bookRating}
 			, NOW()
 		)
 	</insert>
+	
+	<delete id="deleteBookReview">
+		DELETE 
+		  FROM BOOK_REVIEW_T
+		 WHERE BOOK_REVIEW_NO = #{bookReviewNo}
+	</delete>
 	
 	
 </mapper>

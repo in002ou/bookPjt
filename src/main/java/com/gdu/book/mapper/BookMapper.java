@@ -10,7 +10,9 @@ import com.gdu.book.domain.BookReviewDTO;
 
 @Mapper
 public interface BookMapper {
-	public BookDTO selectBookDetail(int bookNo);
+	public List<BookDTO> selectBookList();
+	public BookDTO selectBookDetail(String bookNo);
 	public int insertBookReview(BookReviewDTO bookReviewDTO);
-	public List<BookReviewDTO> selectBookReview(int bookNo);
+	public List<BookReviewDTO> selectBookReview(String bookNo);
+	public int deleteBookReview(String bookReviewNo);
 }

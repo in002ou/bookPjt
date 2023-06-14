@@ -37,11 +37,21 @@
 	</insert>
 	
 	<select id="selectCartList" parameterType="int" resultMap="CartMap">
-		SELECT C.COUNT, B.BOOK_TITLE, B.BOOK_PRICE, B.BOOK_IMAGE 
+		SELECT C.CART_NO, C.COUNT, B.BOOK_TITLE, B.BOOK_PRICE, B.BOOK_IMAGE 
 		  FROM BOOK_T B INNER JOIN CART_T C 
 		    ON B.BOOK_NO = C.BOOK_NO
 		 WHERE USER_NO = #{userNo}
 	</select>
+	
+	<delete id="deleteCart" parameterType="List">
+		DELETE 
+		  FROM CART_T
+		<where>
+			<foreach collection="list" item="cartNo" open="CART_NO IN(" separator="," close=")">
+				#{cartNo}
+			</foreach>
+		</where>
+	</delete>
 	
 	
 	
