@@ -6,5 +6,301 @@
 <!-- namespace는 @Mapper를 지정한다. -->
 <mapper namespace="com.gdu.book.mapper.UserMapper">
 
-
+  <!-- 입력한 아이디가 유저 테이블에 아이디와 값이 같을 경우 아이디 이메일 회원가입일을 조회한다. -->
+  <select id="selectUserById" parameterType="String" resultType="UserDTO">
+    SELECT USER_ID, USER_EMAIL, JOINED_AT
+      FROM USER_T
+     WHERE USER_ID = #{userId}
+  </select>
+  
+  <!-- 입력한 아이디가 휴면 유저 테이블에 아이디와 값이 같을 경우 아이디를 조회한다. -->
+  <select id="selectUserSleepById" parameterType="String" resultType="UserSleepDTO">
+    SELECT USER_SLEEP_ID
+      FROM USER_SLEEP_T
+     WHERE USER_SLEEP_ID = #{userSleepId}
+  </select>
+  
+  <!-- 입력한 아이디가 탈퇴 유저 테이블에 아이디와 값이 같을 경우 아이디를 조회한다. -->
+  <select id="selectUserLeaveById" parameterType="String" resultType="UserLeaveDTO">
+    SELECT USER_LEAVE_ID
+      FROM USER_LEAVE_T
+     WHERE USER_LEAVE_ID = #{userLeaveId}
+  </select>
+  
+  <!-- 입력한 이메일이 유저 테이블에 이메일과 값이 같을 경우 이메일을 조회한다.  -->
+  <select id="selectUserByEmail" parameterType="String" resultType="UserDTO">
+  	SELECT USER_EMAIL
+  	  FROM USER_T
+  	 WHERE USER_EMAIL = #{userEmail} 
+  </select>
+  
+  <!-- 입력한 이메일이 휴면 유저 테이블에 이메일과 값이 같을 경우 이메일을 조회한다. -->
+  <select id="selectUserSleepByEmail" parameterType="String" resultType="UserSleepDTO">
+  	SELECT USER_SLEEP_EMAIL
+  	  FROM USER_SLEEP_T
+  	 WHERE USER_SLEEP_EMAIL = #{userSleepEmail} 
+  </select>
+  
+  <!-- 입력한 이메일이 탈퇴 유저 테이블에 이메일과 값이 같을 경우 이메일을 조회한다.  -->
+  <select id="selectUserLeaveByEmail" parameterType="String" resultType="UserLeaveDTO">
+  	SELECT USER_LEAVE_EMAIL
+  	  FROM USER_LEAVE_T
+  	 WHERE USER_LEAVE_EMAIL = #{userLeaveEmail} 
+  </select>
+  
+  <!-- 입력한 아이디와 비밀번호가 유저 테이블의 값과 같을 경우 아이디를 조회한다. -->
+  <select id="selectUserByUserDTO" parameterType="UserDTO" resultType="UserDTO">
+    SELECT USER_ID , USER_NO
+      FROM USER_T
+     WHERE USER_ID = #{userId}
+       AND USER_PASSWORD = #{userPassword}   
+  </select>
+  
+  <!-- CRUD 유저 정보 삽입 -->
+  <!--
+    useGeneratedKeys="true" keyProperty="userNo" parameterType="UserDTO">
+    자동 증가(AUTO_INCREMENT)한 USER_NO값을 파라미터로 전달한 UserDTO 객체의 userNo 필드에 저장한다.
+  -->
+  <insert id="insertUser" parameterType="UserDTO" useGeneratedKeys="true" keyProperty="userNo">
+  	INSERT INTO USER_T (
+  	    USER_ID
+  	  , USER_PASSWORD
+  	  , USER_NAME
+  	  , USER_GENDER
+  	  , USER_EMAIL
+  	  , USER_MOBILE
+  	  , USER_BIRTHYEAR
+  	  , USER_BIRTHDATE
+  	  , POSTCODE
+  	  , ROAD_ADDRESS
+  	  , JIBUN_ADDRESS
+  	  , DETAIL_ADDRESS
+  	  , EXTRA_ADDRESS
+  	  , AGREECODE
+  	  , JOINED_AT
+  	  , PW_MODIFIED_AT
+  	  , AUTOLOGIN_ID
+  	  , AUTOLOGIN_EXPIRED_AT
+  	  , USER_PROFILE
+  	  , USER_INTRODUCE
+  	  , USER_POINT
+  	  , USER_GRADE	
+  	  , USER_SOCIAL
+  	) VALUES (
+  	    #{userId}
+  	  , #{userPassword}
+  	  , #{userName}
+  	  , #{userGender}
+  	  , #{userEmail}
+  	  , #{userMobile}
+  	  , #{userBirthyear}
+  	  , #{userBirthdate}
+  	  , #{postCode}
+  	  , #{roadAddress}
+  	  , #{jibunAddress}
+  	  , #{detailAddress}
+  	  , #{extraAddress}
+  	  , #{agreecode}
+  	  , NOW()
+  	  , NOW()
+  	  , NULL
+  	  , NULL
+  	  , #{userProfile}
+  	  , #{userIntroduce}
+  	  , #{userPoint}
+  	  , #{userGrade}
+  	  , #{userSocial}
+  	)
+  </insert>
+  
+  <!-- CRUD 접근 유저의 아이디와 마지막 로그인 일자 삽입 -->
+  <insert id="insertUserAccess" parameterType="String">
+  	INSERT INTO USER_ACCESS_T (
+  		USER_ACCESS_ID
+  	  , LAST_LOGIN_AT 	
+  	) VALUES (
+  	    #{userAccessId}
+  	  , NOW()  	
+  	)
+  </insert>
+  
+  <!-- CRUD 접근 유저의 아이디가 입력한 아이디와 같을 경우 현재날짜를 마지막 로그인 칼럼에 업데이트 -->
+  <update id="updateUserAccess" parameterType="String">
+  	UPDATE USER_ACCESS_T
+  	   SET LAST_LOGIN_AT = NOW()
+  	 WHERE USER_ACCESS_ID = #{userAccessId}  
+  </update>
+  
+  <!-- CRUD 유저 테이블의 아이디와 입력한 값의 아이디가 같을때 자동로그인 아이디와 자동로그인 만료일을 업데이트  -->
+  <update id="insertAutologin" parameterType="UserDTO">
+  	UPDATE USER_T
+  	   SET AUTOLOGIN_ID = #{autologinId}
+  		 , AUTOLOGIN_EXPIRED_AT = #{autologinExpiredAt}
+     WHERE ID = #{userId}		 
+  </update>
+  
+  <!-- CRUD 유저테이블의 아이디와 입력한 값의 아이디가 같을때 자동로그인 아이디와 만료일에 null 업데이트 -->
+  <update id="deleteAutologin" parameterType="String">
+  	UPDATE USER_T
+  	   SET AUTOLOGIN_ID = NULL
+  	     , AUTOLOGIN_EXPIRED_AT = NULL
+  	 WHERE ID = #{userId}   
+  </update>
+  
+  <!-- 유저 테이블에 자동로그인 아이디와 입력한 값이 같을때 그리고 자동로그인 만료일이 현재날짜보다 클때 아이디 조회 -->
+  <select id="selectAutologin" parameterType="String">
+    SELECT USER_ID
+      FROM USER_T
+     WHERE AUTOLOGIN_ID = #{autologinId}
+       AND AUTOLOGIN_EXPIRED_AT > NOW()
+  </select>
+  
+  <!-- 탈퇴회원테이블에 아이디 이메일 회원가입일 탈퇴일 삽입하기 -->
+  <insert id="insertLeaveUser" parameterType="UserLeaveDTO">
+  	INSERT INTO USER_LEAVE_T (
+  		USER_LEAVE_ID
+  	  , USER_LEAVE_EMAIL
+  	  , JOINED_LEAVE_AT
+  	  , LEAVED_AT
+  	) VALUES (
+  		#{userLeaveId}
+  	  , #{userLeaveEmail}
+  	  , #{joinedLeaveAt}
+  	  , NOW()	
+  	)
+  </insert>
+  
+  <!-- 유저테이블의 아이디가 입력한 값과 같으면 삭제한다.  -->
+  <delete id="deleteUser" parameterType="String">
+  	DELETE
+  	  FROM USER_T
+  	 WHERE USER_ID = #{userId} 
+  </delete>
+  
+  <!-- 휴면처리 1단계 : 1년 (12개월) 이상 접속 내역(USER_ACCESS_T의 LAST_LOGIN_AT)이 없는 회원을 휴면 테이블에 저장하기 -->
+  <insert id="insertSleepUser">
+  	INSERT INTO SLEEP_USER_T (
+  		USER_SLEEP_NO
+  	  , USER_SLEEP_ID
+  	  , USER_SLEEP_PASSWORD 	
+  	  , USER_SLEEP_NAME
+  	  , USER_SLEEP_GENDER
+  	  , USER_SLEEP_EMAIL
+  	  , USER_SLEEP_MOBILE
+  	  , USER_SLEEP_BIRTHYEAR
+  	  , USER_SLEEP_BIRTHDATE
+  	  , USER_SLEEP_POSTCODE
+  	  , USER_SLEEP_ROAD_ADDRESS
+  	  , USER_SLEEP_JIBUN_ADDRESS
+  	  , USER_SLEEP_DETAIL_ADDRESS
+  	  , USER_SLEEP_EXTRA_ADDRESS
+  	  , USER_SLEEP_AGREECODE
+  	  , USER_SLEEP_JOINED_AT
+  	  , USER_SLEEP_PW_MODIFIED_AT
+  	  , USER_SLEEP_PROFILE
+  	  , USER_SLEEP_INTRODUCE
+  	  , USER_SLEEP_POINT
+  	  , USER_SLEEP_GRADE
+  	  , USER_SLEEP_SOCIAL
+  	  , USER_SLEEP_AT
+  	) (SELECT U.USER_SLEEP_NO
+  			, U.USER_SLEEP_ID
+  			, U.USER_SLEEP_PASSWORD
+  			, U.USER_SLEEP_NAME
+  			, U.USER_SLEEP_GENDER
+  			, U.USER_SLEEP_EMAIL
+  			, U.USER_SLEEP_MOBILE
+  			, U.USER_SLEEP_BIRTHYEAR
+  			, U.USER_SLEEP_BIRTHDATE
+  			, U.USER_SLEEP_POSTCODE
+  			, U.USER_SLEEP_ROAD_ADDRESS
+  			, U.USER_SLEEP_JIBUN_ADDRESS
+  			, U.USER_SLEEP_DETAIL_ADDRESS
+  			, U.USER_SLEEP_EXTRA_ADDRESS
+  			, U.USER_SLEEP_AGREECODE
+  			, U.USER_SLEEP_JOINED_AT
+  			, U.USER_SLEEP_PW_MODIFIED_AT
+  			, U.USER_SLEEP_PROFILE
+  			, U.USER_SLEEP_INTRODUCE
+  			, U.USER_SLEEP_POINT
+  			, U.USER_SLEEP_GRADE
+  			, U.USER_SLEEP_SOCIAL
+  			, NOW()
+  		 FROM USER_T U LEFT OUTER JOIN USER_ACCESS_T UA
+  		   ON U.USER_ID = UA.USER_ACCESS_ID
+  		WHERE MONTHS_BETWEEN(NOW(), UA.LAST_LOGIN_AT) >= 12 						   <!--  12개월 이상 로그인 이력이 없는 회원 -->   	
+  		   OR (MONTHS_BETWEEN(NOW(), U.JOINED_AT) >= 12 AND UA.LAST_LOGIN_AT IS NULL)) <!-- 가입일이 12개월 이상 지나고, 로그인 이력이 아예 없는 회원 -->
+  	)
+  </insert>
+  
+  <!-- 휴면처리 2단계 : 1년(12개월) 이상 접속 내역(USER_ACCESS_T의 LAST_LOGIN_AT)이 없는 회원을 회원 테이블에서 삭제하기 -->
+  <delete id="deleteUserForSleep">
+    DELETE
+      FROM USER_T
+     WHERE ID IN(SELECT U.USER_ID
+                   FROM USER_T U LEFT OUTER JOIN USER_ACCESS_T UA
+                     ON U.USER_ID = UA.USER_ACCESS_ID
+                  WHERE MONTHS_BETWEEN(NOW(), UA.LAST_LOGIN_AT) >= 12
+                     OR (MONTHS_BETWEEN(NOW(), U.JOINED_AT) >= 12 AND UA.LAST_LOGIN_AT IS NULL))
+  </delete>
+  
+   <!-- 휴면복원 1단계 : 휴면 테이블의 데이터를 회원 테이블에 저장하기 -->
+   <insert id="insertRestoreUser" parameterType="String">
+   	INSERT INTO USER_T (
+   		USER_NO
+   	  ,	USER_ID
+  	  , USER_PASSWORD
+  	  , USER_NAME
+  	  , USER_GENDER
+  	  , USER_EMAIL	
+  	  , USER_MOBILE
+  	  , USER_BIRTHYEAR
+  	  , USER_BIRTHDATE
+  	  , POSTCODE
+  	  , ROAD_ADDRESS
+  	  , JIBUN_ADDRESS
+  	  , DETAIL_ADDRESS
+  	  , EXTRA_ADDRESS
+  	  , AGREECODE
+  	  , JOINED_AT
+  	  , PW_MODIFIED_AT
+  	  , USER_PROFILE
+  	  , USER_INTRODUCE
+  	  , USER_POINT
+  	  , USER_GRADE	
+  	  , USER_SOCIAL
+   	) (SELECT USER_SLEEP_NO
+   			, USER_SLEEP_ID
+   			, USER_SLEEP_PASSWORD
+		    , USER_SLEEP_NAME
+		    , USER_SLEEP_GENDER
+		  	, USER_SLEEP_EMAIL
+		  	, USER_SLEEP_MOBILE
+		  	, USER_SLEEP_BIRTHYEAR
+		  	, USER_SLEEP_BIRTHDATE
+		  	, USER_SLEEP_POSTCODE
+		 	, USER_SLEEP_ROAD_ADDRESS
+		  	, USER_SLEEP_JIBUN_ADDRESS
+		  	, USER_SLEEP_DETAIL_ADDRESS
+		  	, USER_SLEEP_EXTRA_ADDRESS
+		  	, USER_SLEEP_AGREECODE
+		  	, USER_SLEEP_JOINED_AT
+		  	, USER_SLEEP_PW_MODIFIED_AT
+		  	, USER_SLEEP_PROFILE
+		  	, USER_SLEEP_INTRODUCE
+		  	, USER_SLEEP_POINT
+		  	, USER_SLEEP_GRADE	
+		  	, USER_SLEEP_SOCIAL
+		 FROM USER_SLEEP_T
+		WHERE USER_SLEEP_ID = #{userId})
+   </insert>
+   
+   <!-- 휴면복원 2단계 : 복원할 회원을 SLEEP_USER_T 테이블에서 삭제하기 -->
+  <delete id="deleteSleepUser" parameterType="String">
+    DELETE
+      FROM USER_SLEEP_T
+     WHERE USER_SLEEP_ID = #{userId}
+  </delete>
+  
+  
 </mapper>
