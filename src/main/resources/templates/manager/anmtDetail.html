@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/header::head('관리자 페이지')}"></head>
+<style>
+	.manager{
+		margin-top: 170px;
+	}
+
+	.wrap {
+		text-align: center;
+	}
+	
+	.anmt{
+		text-align: left;
+	}
+	
+	
+</style>
+<script th:inline="javascript">
+	
+</script>
+<body>
+
+	
+	<div th:replace="~{layout/header::gnb}"></div>
+	
+	<div class="wrap">
+		<h1>공지사항</h1>
+		<div class="anmt">
+			<div th:text="${anmDTO.title}"></div>
+			<div th:utext="${anmDTO.anmContent}"></div>
+			<div th:text="${anmDTO.registration}"></div>
+			<div th:text="${anmDTO.image}"></div>
+			<div th:text="${anmDTO.anmCount}"></div>
+			<input type="button" value="뒤로가기" onclick="fnBack()">
+		</div>
+	</div>
+  	
+  	<script>
+  	
+	  	function fnBack(){
+			history.back();
+		}
+  	
+  	</script>
+
+</body>
+</html>
