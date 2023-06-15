@@ -22,20 +22,21 @@
 	<div th:replace="~{layout/header::gnb}"></div>
 	
 	<div class="wrap">
-		<a th:href="@{/manager/QnAList.html}" id="QnaList">1:1문의내역</a> 
 		<h1>1:1 문의하기</h1>
-		<form th:action="@{manager/addQnA}" method="post" id="frmAddQna">
-			<input type="text" placeholder="제목을 입력해주세요" name="QnaTitle" id="Qnatitle">
+		<form th:action="@{/manager/addQnA.do}" method="post" id="frmAddQna">
+			<textarea rows="10" cols="50" id="QnaContent" name="title" placeholder="문의 내용을 입력해주세요" required="required"></textarea>
 			<br>
-			<textarea rows="5" cols="30" id="QnaContent"></textarea>
-			<br>
-			<input type="button" value="문의하기" id="addQna">
+			<button>작성완료</button>
+			<input type="button" value="목록" onclick="fnList()">
 		</form>
 	</div>
 
   	
   	<script>
-  
+  	
+	  	function fnList(){
+			location.href = '/manager/QnA.do';
+		}
   	
   	</script>
 

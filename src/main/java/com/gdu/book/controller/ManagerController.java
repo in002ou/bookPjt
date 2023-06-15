@@ -2,15 +2,18 @@ package com.gdu.book.controller;
 
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.book.service.ManagerService;
 
@@ -28,8 +31,24 @@ public class ManagerController {
 		return "manager/manager";
 	}
 	
-	@GetMapping("/QnA.html")
-	public String QnA() {
+	@GetMapping("/addBook.html")
+	public String Book() {
+		return "manager/addBook.html";
+	}
+	
+	@GetMapping("/writeQna.html")
+	public String writeQna() {
+		return "manager/writeQna";
+	}
+	
+	@GetMapping("/writeAnmt.html")
+	public String writeAnmt() {
+		return "manager/writeAnmt";
+	}
+	
+	@GetMapping("/QnA.do")
+	public String QnA(HttpServletRequest request, Model model) {
+		managerService.QnaList(request, model);
 		return "manager/QnA";
 	}
 	
@@ -46,10 +65,47 @@ public class ManagerController {
 		return managerService.addBook(request);
 	}
 	
-	@PostMapping("addQnA.html")
-	public String addQnA(HttpServletRequest request, Model model) {
-		
-		return null;
+	@PostMapping("/addQnA.do")
+	public String addQnA(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("addResult", managerService.addQna(request));
+		return "redirect:/manager/QnA.do";
 	}
+	
+	@PostMapping("/answer.do")
+	public String answer(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("updateResult", managerService.answerQna(request));
+		return "redirect:/manager/QnA.do";
+	}
+	
+	@PostMapping("/remove.do")
+	public String remove(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("removeResult", managerService.deleteQna(request));
+		return "redirect:/manager/QnA.do";
+	}
+	
+	@PostMapping("/addAnmt.do")
+	public void add(HttpServletRequest request, HttpServletResponse response) {
+		managerService.addAnmt(request, response);
+	}
+	
+	@GetMapping("/anmt.do")
+	public String anmt(HttpServletRequest request, Model model) {
+		managerService.selectAnmt(request, model);
+		return "manager/anmt";
+	}
+	
+	@GetMapping("/anmtDetail.do")
+	public String anmtDetail(@RequestParam(value="anmNo", required=false, defaultValue="0") int anmNo
+            , Model model) {
+		model.addAttribute("anmDTO", managerService.anmtDetail(anmNo));
+		return "manager/anmtDetail";
+	}
+	
+	@ResponseBody
+	@PostMapping(value="/imageUpload.do", produces="application/json")
+	public Map<String, Object> imageUpload(MultipartHttpServletRequest multipartRequest) {
+		return managerService.imageUpload(multipartRequest);
+	}
+	
 	
 }
