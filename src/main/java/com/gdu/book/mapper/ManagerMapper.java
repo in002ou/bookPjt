@@ -12,7 +12,7 @@ import com.gdu.book.domain.SummernoteImageDTO;
 
 @Mapper
 public interface ManagerMapper {
-
+	
 	// 책 등록
 	public int addBook(BookDTO bookDTO);
 	
@@ -26,7 +26,6 @@ public interface ManagerMapper {
 	
 	// Qna 답변
 	public int answerQna(QnaDTO qnaDTO);
-	
 	public int deleteQna(int qnaNo);
 	
 	// 공지사항

@@ -294,28 +294,31 @@ public class ManagerServiceImpl implements ManagerService {
 		return anmDTO;
 	}
 	
-	 @Override
-	  public Map<String, Object> imageUpload(MultipartHttpServletRequest multipartRequest) {
-	    
+	@Override
+	public Map<String, Object> imageUpload(MultipartHttpServletRequest multipartRequest) {
+    
 		 MultipartFile multipartFile = multipartRequest.getFile("file");
-	    
+		
 		 String summernoteImagePath = myFileUtil.getSummernoteImagePath();
-	    
+		
 		 File dir = new File(summernoteImagePath);
 		 if(dir.exists() == false) {
 			 dir.mkdirs();
 		 }
-	    
+		
 		 String filesystemName = myFileUtil.getFilesystemName(multipartFile.getOriginalFilename());
-	    
+		
 		 try {
 			 File file = new File(dir, filesystemName);
 			 multipartFile.transferTo(file);
 		 } catch(Exception e) {
 			 e.printStackTrace();
 		 }
+		 
 		 Map<String, Object> map = new HashMap<String, Object>();
 		 map.put("src", "/imageLoad/" + filesystemName);
+		 
 		 return map;
-	  }
+			 
+	}
 }
