@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
 	      out.println("<script>");
 	      if(joinResult == 1) {
 	        out.println("alert('회원 가입되었습니다.');");
-	        out.println("location.href='" + request.getContextPath() + "/index.do';");
+	        out.println("location.href='" + "/index.do';");
 	      } else {
 	        out.println("alert('회원 가입에 실패했습니다.');");
 	        out.println("history.go(-2);");
@@ -197,7 +197,7 @@ public class UserServiceImpl implements UserService {
 	    		PrintWriter out = response.getWriter();
 	    		out.println("<script>");
 	    		out.println("alert('일치하는 회원 정보가 없습니다.');");
-	    		out.println("location.href=/index.do';");
+	    		out.println("location.href='"+"/index.do';");
 	    		out.println("</script>");
 	    		out.flush();
 	    		out.close();
@@ -210,6 +210,20 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public void autologin(HttpServletRequest request, HttpServletResponse response) {
+		
+	 /*
+	  자동 로그인 처리하기
+	  
+	  1. 자동 로그인을 체크한 경우
+	    1) session의 id를 	DB의 AUTOLOGIN_ID 칼럼에 저장한다. (중복이 없고, 다른 사람이 알기 어려운 정보를 이용해서 자동 로그인에서 사용할 ID를 결정한다.)
+	    2) 자동 로그인을 유지할 기간(예시 : 15일)을 DB의 AUTOLOGIN_EXPIRED_AT 칼럼에 저장한다.
+	    3) session의 id를 쿠키로 저장한다. (쿠키 : 각 사용자의 브라우저에 저장되는 정보)
+	       이 때 쿠키의 유지 시간을 자동 로그인을 유지할 기간과 동일하게 맞춘다.
+	  
+	  2. 자동 로그인을 체크하지 않은 경우
+	    1) DB에 저장된 AUTOLOGIN_ID 칼럼과 AUTOLOGIN_EXPIRED_AT 칼럼의 정보를 삭제한다.
+	    2) 쿠키를 삭제한다.
+	*/
 		
 		
 		// 요청 파라미터
@@ -350,7 +364,7 @@ public class UserServiceImpl implements UserService {
 		  if(insertResult == 0 && deleteResult == 0) {
 		    session.removeAttribute("sleepUserId"); // session에 저장된 sleepUserId 제거
 		    out.println("alert('휴면 계정이 복구되었습니다. 휴면 계정 활성화를 위해서 다시 로그인 해 주세요.');");
-		    out.println("location.href='" + request.getContextPath() + "/index.do';");
+		    out.println("location.href='" + "/index.do';");
 		  } else {
 			  out.println("alert('휴면 계정이 복구되지 않았습니다. 다시 시도하세요.');");
 		      out.println("history.back();");
