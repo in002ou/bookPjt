@@ -197,7 +197,7 @@ public class UserServiceImpl implements UserService {
 	    		PrintWriter out = response.getWriter();
 	    		out.println("<script>");
 	    		out.println("alert('일치하는 회원 정보가 없습니다.');");
-	    		out.println("location.href=/index.do';");
+	    		out.println("location.href='"+"/index.do';");
 	    		out.println("</script>");
 	    		out.flush();
 	    		out.close();
