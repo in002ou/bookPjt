@@ -231,7 +231,7 @@
 	
 </body>
 
-<script>
+<script th:inline="javascript">
 	$(function(){
 		fnChkAll();
 		fnChkOne();
@@ -262,7 +262,7 @@
 				event.preventDefault();
 				return;
 			}
-			if(confirm('선택된 게시글을 모두 삭제할까요?') == false){
+			if(confirm('선택된 제품을 모두 삭제할까요?') == false){
 				event.preventDefault();
 				return;
 			}

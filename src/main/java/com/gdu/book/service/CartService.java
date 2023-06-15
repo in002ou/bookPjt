@@ -11,5 +11,5 @@ public interface CartService {
 	public void getCartList(HttpServletRequest request, Model model);
 	public int addCart(HttpServletRequest request);
 	public void removeCart(HttpServletRequest request, HttpServletResponse response);
-	public void countDown(HttpServletRequest request, HttpServletResponse response);
+	public void getcartDetail(HttpServletRequest request, Model model);
 }

@@ -87,8 +87,20 @@ public class CartServiceImpl implements CartService {
 	}
 	
 	@Override
-	public void countDown(HttpServletRequest request, HttpServletResponse response) {
+	public void getcartDetail(HttpServletRequest request, Model model) {
+		int userNo = 1;
 		
+		List<CartDTO> cartList = cartMapper.selectCartList(userNo);
+		int totalPrice = 0;
+		for(int i = 0; i < cartList.size(); i++) {
+			for(int x = 0; x < cartList.get(i).getCount(); x++) {
+				totalPrice += cartList.get(i).getBookDTO().getBookPrice();
+			}
+		}
+		int orderNo = (int)Math.floor(Math.random() * 10000000) + 1;
+		model.addAttribute("orderNo", orderNo);
+		model.addAttribute("totalPrice", totalPrice);
+		model.addAttribute("cartList", cartList);
 		
 	}
 

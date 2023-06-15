@@ -10,6 +10,9 @@
 		margin:170px 50px 0px 50px;
 		border:1px solid black;
 	}
+	.bookListHeader {
+		display: flex;
+	}
 	.book{
 		width: 100%;
 		height: 250px;
@@ -39,14 +42,50 @@
 	.btnCart{
 		margin: 0 auto;
 	}
+	.pagination {
+		text-align: center;
+		font-size: 24px;
+		letter-spacing: 8px;
+	}
 	
 	
 </style>
+<script th:inline="javascript">
+	function fnSearch(){
+		$('#btnSearch').on('click', function(){
+			$.ajax({
+				type : 'get',
+				url : 'book/bookSearch.do',
+				data : ('#bookSearch').serialize(),
+				dataType : 'json',
+				success : function(resData){
+					
+				}
+			})
+		})
+		
+		
+	}
+
+</script>
 <body>
 
 	<div th:replace="~{layout/header::gnb}"></div>
 		<div class="bookListAll">
-			<h1>도서 목록</h1>
+			<div class="bookListHeader">
+				<div><h1>도서 목록</h1></div>
+				<div>
+					<form class="bookSearch">
+						<select id="column" name="column">
+					    	<option value="TITLE">제목</option>
+					        <option value="AUTHOR">저자</option>
+					    </select>
+					     <input type="text" name="searchText">
+					     <input type="button" id="btnSearch" value="검색">
+					     <input type="button" value="목록" onclick="fnList()">
+					</form>
+				</div>
+			</div>
 			<th:block th:each="bookList,vs:${bookList}">
 				<div class="book">
 					<div class="bookImage">
@@ -77,6 +116,7 @@
 					</div>
 				</div>
 			</th:block>
+			<div class="pagination" th:utext="${pagination}"></div>
 		</div>
 	<div th:replace="~{layout/footer::foot}"></div>
 	

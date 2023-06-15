@@ -41,11 +41,12 @@ public class CartController {
 		cartService.removeCart(request, response);
 		
 	}
-	@GetMapping("/countDown.do")
-	public void countDown(HttpServletRequest request, HttpServletResponse response) {
-		cartService.countDown(request, response);
+	
+	@GetMapping("/cartDetail.do")
+	public String cartDetail(HttpServletRequest request, Model model) {
+		cartService.getcartDetail(request, model);
+		return "cart/cartdetail";
 	}
-  
   
   
   

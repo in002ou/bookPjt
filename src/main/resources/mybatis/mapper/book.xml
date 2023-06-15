@@ -18,11 +18,20 @@
 		</association>
 	</resultMap>
 	
-	
-	<select id="selectBookList" resultType="BookDTO">
-		SELECT BOOK_NO, BOOK_TITLE, BOOK_PRICE, BOOK_AT, BOOK_AUTHOR, BOOK_IMAGE, BOOK_DESCRIPTION
-		FROM BOOK_T
+	<select id="getBookCount" resultType="int">
+		SELECT COUNT(*)
+		  FROM BOOK_T
 	</select>
+	
+	<select id="selectBookList" parameterType="Map" resultType="BookDTO">
+		SELECT B.BOOK_NO, B.BOOK_TITLE, B.BOOK_PRICE, B.BOOK_AT, B.BOOK_AUTHOR, B.BOOK_IMAGE, B.BOOK_DESCRIPTION
+		  FROM (SELECT BOOK_NO, BOOK_TITLE, BOOK_PRICE, BOOK_AT, BOOK_AUTHOR, BOOK_IMAGE, BOOK_DESCRIPTION
+		          FROM BOOK_T) B
+		ORDER BY BOOK_NO ASC
+		LIMIT #{begin}, #{recordPerPage}
+	</select>
+	
+	<select id="searchBook" parameterType=""></select>
 
 	<select id="selectBookDetail" parameterType="String" resultType="BookDTO">
 		SELECT *

@@ -1,6 +1,9 @@
 package com.gdu.book.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,8 +12,10 @@ import org.springframework.ui.Model;
 
 import com.gdu.book.domain.BookDTO;
 import com.gdu.book.domain.BookReviewDTO;
+import com.gdu.book.domain.BookSearchDTO;
 import com.gdu.book.domain.UserDTO;
 import com.gdu.book.mapper.BookMapper;
+import com.gdu.book.util.PageUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,12 +23,45 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-	public final BookMapper bookMapper;
+	private final BookMapper bookMapper;
+	private final PageUtil pageUtil;
 	
 	@Override
 	public void getBookList(HttpServletRequest request, Model model) {
-		List<BookDTO> bookList = bookMapper.selectBookList();
+		Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+		int page = Integer.parseInt(opt.orElse("1"));
+		
+		int totalRecord = bookMapper.getBookCount();
+		
+		int recordPerPage = 5;
+		
+		pageUtil.setPageUtil(page, totalRecord, recordPerPage);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("begin", pageUtil.getBegin());
+		map.put("recordPerPage", recordPerPage);
+		
+		List<BookDTO> bookList = bookMapper.selectBookList(map);
 		model.addAttribute("bookList", bookList);
+		model.addAttribute("beginNo", totalRecord - (page - 1) * recordPerPage);
+		model.addAttribute("pagination", pageUtil.getPagination(request.getRequestURI()));
+	}
+	
+	@Override
+	public Map<String, Object> searchBook(BookSearchDTO bookSearchDTO) {
+		List<BookDTO> list = bookMapper.searchBook(bookSearchDTO);
+		
+		String message = null;
+		if(list.isEmpty()) {
+			message = bookSearchDTO.getSearchText() + " 의 검색결과가 없습니다";
+		} else {
+			message = list.size() + "개의 검색 결과가 있습니다";
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+	    map.put("list", list);
+	    map.put("message", message);
+	    
+	    return map;
 	}
 	
 	@Override
