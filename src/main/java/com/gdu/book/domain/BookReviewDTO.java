@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BookReviewDTO {
 	private int bookReviewNo;
-	private BookDTO bookDTO;
+	private String bookNo;
 	private UserDTO userDTO;
 	private String bookReview;
 	private double bookRating;

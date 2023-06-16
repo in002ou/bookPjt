@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/header::head('주문완료 페이지')}"></head>
+<style>
+	body{
+	    background-color: #f6f6f6;
+	}
+	.detailList {
+		margin:200px 100px 0px 100px;
+		height: 100%;
+		background-color: #fff;
+	}
+	.topComent{
+		font-size: 24px;
+		padding: 10px 0px 0px 10px;
+	}
+	.detailHeader {
+		margin: 10px 0px 0px 0px;
+		padding: 80px 0px 0px 20px;
+		border-top: 3px dashed #4879e3;
+		font-size: 36px;
+		
+	}
+	.orderComent {
+		color:#48b353;
+	}
+	.detailBody {
+		margin: 50px 20px 0px 20px;
+	}
+	.orderNo {
+		font-size: 18px;
+		color:#48b353;
+	}
+	.detailBodyContent {
+		margin: 10px 0px 0px 0px;
+		font-size: 18px;
+	}
+	.bookContentall{
+		margin: 30px 0px 0px 0px;
+		display: flex;
+		height: 200px;
+		border-bottom: 1px solid lightgrey;
+	}
+	.bookContentall > img {
+		height: 90%;
+	}
+	.bookContent {
+		display: block;
+		margin: 0px 0px 0px 40px;
+	}
+	
+</style>
+<script th:inline="javascript">
+	
+</script>
+<body>
+
+	
+	<div th:replace="~{layout/header::gnb}"></div>
+	<div class="detailList">
+		<strong class="topComent">주문/결제</strong>
+		<div class="detailHeader">
+			<strong class="orderComent">주문이 정상적으로 완료</strong>되었습니다
+		</div>
+		<div class="detailBody">
+			<div class="detailBodyContent">
+				<strong>주문번호&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+				<strong class="orderNo" th:text="${orderNo}"></strong>
+			</div>
+			<div class="detailBodyContent">
+				<strong>결제금액&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+				<strong th:text="|${totalPrice}원|"></strong>
+			</div>
+			<div class="detailBodyContent">
+				<strong>주문정보&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+				<div>
+					<th:block th:each="cartlist,vs:${cartList}">
+						<div class="bookContentall">
+							<img th:src="${cartlist.bookDTO.bookImage}">
+							<div class="bookContent">
+								<p th:text="${cartlist.bookDTO.bookTitle}">
+								<p th:text="|${cartlist.count} 개|">
+							</div>
+						</div>
+					</th:block>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+  	
+  	<div th:replace="~{layout/footer::foot}"></div>
+
+</body>
+</html>

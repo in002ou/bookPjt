@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/header::head('환영합니다')}"></head>
 
+
 <style>
 	button {
     margin: 20px;
 	}
 	.w-btn {
 		cursor: pointer;
-	    position: relative;
 	    border: none;
 	    display: inline-block;
 	    padding: 15px 30px;
@@ -19,7 +19,6 @@
 	    transition: 0.25s;
 	}
 	.w-btn-outline {
-	    position: relative;
 	    padding: 15px 30px;
 	    border-radius: 15px;
 	    font-family: "paybooc-Light", sans-serif;
@@ -82,10 +81,19 @@
     	border:1px solid black;
 	    text-align: left;
 	}
-	.bookDetail > div {
+	.bookDetail > .bookDetail1 {
 		height: 10%;
 	    width: 100%;
 	    text-align: left;
+	}
+	.bookDescription{
+		height: 210px;
+		overflow: hidden;
+		text-overflow:ellipsis;
+	}
+	.bookDescription > strong {
+		overflow: hidden;
+		text-overflow:ellipsis;
 	}
 	.payment {
     	width: 20%;
@@ -100,7 +108,36 @@
 	.reviewBtnandContent {
 		display: flex;
 	}
+	.reviewAll{
+		height: 100px;
+		width: 100%;
+		border-bottom: 1px solid #d5d5d5;
+		padding: 10px;
+	}
+	.reviewHeader {
+		height: 24px;
+		width: 80%;
+		display: flex;
+		
+	}
+	.reviewHeader > div{
+	}
+	.reviewHeader > strong {
+		font-size: 12px;
+	}
 	
+	.reviewBody{
+		padding-top: 10px;
+		height: 50px;
+		font-size: 24px;
+	}
+	
+	.reviewfooter{
+		height: 24px;
+		text-align: right;
+		font-size: 12px;
+		color: #d5d5d5;
+	}
 	
 </style>
 <body>
@@ -110,24 +147,22 @@
 			<div class="bookDetailandPayment">
 				<div class="bookImage"><img th:src="${bookDetail.bookImage}"></div>
 				<div class="bookDetail">
-					<div>
-						<strong>제목 : </strong>
-						<strong th:text="${bookDetail.bookTitle}"></strong>
+					<div class="bookDetail1">
+						<strong th:text="|제목 : ${bookDetail.bookTitle}|"></strong>
 					</div>
-					<div>
-						<strong>저자 : </strong>
-						<strong th:text="${bookDetail.bookAuthor}"></strong>
+					<div class="bookDetail1">
+						<strong th:text="|저자 : ${bookDetail.bookAuthor}|"></strong>
 					</div>
-					<div>
-						<strong>가격 : </strong>
-						<strong th:text="${bookDetail.bookPrice}"></strong>
+					<div class="bookDetail1">
+						<strong th:text="|가격 : ${bookDetail.bookPrice}|"></strong>
 					</div>
-					<div>
-						<strong>출간일자 : </strong>
-						<strong th:text="${bookDetail.bookAt}"></strong>
+					<div class="bookDetail1">
+						<strong th:text="|출간일자 : ${#dates.format(bookDetail.bookAt, 'yyyy-MM-dd')}|"></strong>
 					</div>
-					<div>
-						<strong>줄거리 : </strong>
+					<div class="bookDescription">
+						<div>
+							<strong>줄거리 : </strong>
+						</div>
 						<strong th:text="${bookDetail.bookDescription}"></strong>
 					</div>
 				</div>
@@ -135,9 +170,10 @@
 					<form method="post" th:action="@{/cart/addCart.do}">
 						<input type="hidden" value="1" name="userNo">
 						<input type="hidden" th:value="${bookDetail.bookNo}" name="bookNo">
-						<div><input type="number" id="count" min="1" max="10" value="1" name="count">개</div>
+						<div>수량 : <input type="number" id="count" min="1" max="10" value="1" name="count">개</div>
 						<button class="w-btn w-btn-indigo">장바구니 담기</button>
 					</form>
+					<button onclick="fnCartList()" class="w-btn w-btn-indigo">장바구니</button>
 				</div>
 			</div>	
 			<hr>
@@ -145,6 +181,8 @@
 				<div class="bookReview">
 					<strong>한줄평 등록</strong>
 					<div class="reviewBtnandContent">
+						<input type="hidden" value="1" name="userNo">
+						<input type="hidden" th:value="${bookDetail.bookNo}" name="bookNo">
 				    	<textarea id="review" name="review" rows="4" cols="50" placeholder="한줄평을 입력해주세요!"></textarea>
 					    <button class="w-btn w-btn-indigo">등록</button>
 				  	</div>
@@ -161,36 +199,76 @@
 					    <input type="radio" id="star1" name="rating" value="5">
 					    <label for="star1">★★★★★</label>
 					</div>
-					<input type="hidden" th:value="${bookDetail.bookNo}" name="bookNo">
 				</div>
 			</form>
 			<div>
+				<hr>
+				<strong>유저 한줄평</strong>
 				<th:block th:each="review,vs:${bookReview}">
-					<strong th:text="${review.userDTO.userId}"></strong>
-					<strong th:text="${review.bookReview}"></strong>
-					<th:block th:if="${review.bookRating == 1}">★</th:block>
-					<th:block th:if="${review.bookRating == 2}">★★</th:block>
-					<th:block th:if="${review.bookRating == 3}">★★★</th:block>
-					<th:block th:if="${review.bookRating == 4}">★★★★</th:block>
-					<th:block th:if="${review.bookRating == 5}">★★★★★</th:block>
+					<div class="reviewAll">
+						<div class="reviewHeader">
+							<div>
+								<strong th:text="|아이디 : ${review.userDTO.userId}|"></strong>
+								<strong th:text="|&nbsp;&nbsp;등록일자 : ${review.bookReviewCreatedAt}|"></strong>
+								<strong>&nbsp;&nbsp;별점 : </strong>
+								<th:block th:if="${review.bookRating == 1}">★</th:block>
+								<th:block th:if="${review.bookRating == 2}">★★</th:block>
+								<th:block th:if="${review.bookRating == 3}">★★★</th:block>
+								<th:block th:if="${review.bookRating == 4}">★★★★</th:block>
+								<th:block th:if="${review.bookRating == 5}">★★★★★</th:block>
+							</div>
+							<div>
+								<form method="post" th:action="@{/book/deleteReview.do}">
+									<input type="hidden" th:value="${review.bookReviewNo}" name="bookReviewNo">
+									<input type="hidden" th:value="${review.bookNo}" name="bookNo">
+									<button>삭제</button>
+								</form>
+							</div>
+						</div>
+						
+						<div class="reviewBody">
+							<strong th:text="${review.bookReview}"></strong>
+						</div>
+						<div class="reviewfooter">
+							<a href="">신고</a>
+						</div>
+					</div>
 				</th:block>
 			</div>
 		</div>
 	<div th:replace="~{layout/footer::foot}"></div>
 	
 </body>
-<script>
+
+<script th:inline="javascript">
 	$(function(){
 		let addResult = /*[[${addResult}]]*/ null;
-		
+		console.log(addResult);
 		if(addResult != null){
-			if(addResult == 2){
+			if(addResult == 1){
 				alert('한줄평이 등록되었습니다.');
 			} else {
 				alert('한줄평이 등록되지 않았습니다.');
 			}
 		}
 	})
+	
+	$(function(){
+		let deleteResult = /*[[${deleteResult}]]*/ null;
+		console.log(deleteResult);
+		if(deleteResult != null){
+			if(deleteResult == 1){
+				alert('한줄평이 삭제되었습니다.');
+			} else {
+				alert('한줄평이 삭제되지 않았습니다.');
+			}
+		}
+	})
+	
+	function fnCartList(){
+		location.href = '/cart/cartList.do?userNo=1';
+	}
 	 
 </script>
+
 </html>

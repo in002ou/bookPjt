@@ -11,4 +11,5 @@ import com.gdu.book.domain.CartDTO;
 public interface CartMapper {
 	public int insertCart(CartDTO cartDTO);
 	public List<CartDTO> selectCartList(int userNo);
+	public int deleteCart(List<String> cartNoList);
 }
