@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -220,7 +221,7 @@ public class ManagerServiceImpl implements ManagerService {
 		anmDTO.setAnmContent(anmContent);
 		anmDTO.setAnmCount(anmCount);
 		
-		int addResult = managerMapper.addAnmt(anmDTO);
+		
 		
 		Document document = Jsoup.parse(anmContent);
 	    Elements elements = document.getElementsByTag("img");
@@ -232,9 +233,13 @@ public class ManagerServiceImpl implements ManagerService {
 	          SummernoteImageDTO summernoteImageDTO = new SummernoteImageDTO();
 	          summernoteImageDTO.setFilesystemName(filesystemName);
 	          summernoteImageDTO.setBlogNo(anmDTO.getAnmNo());
+	          anmDTO.setImage(filesystemName);
+	          
 	          managerMapper.addSummernoteImage(summernoteImageDTO);
 	        }
 	    }
+	    
+	    int addResult = managerMapper.addAnmt(anmDTO);
 	    
 	    // 응답
 	    try {
@@ -243,10 +248,10 @@ public class ManagerServiceImpl implements ManagerService {
 	      PrintWriter out = response.getWriter();
 	      out.println("<script>");
 	      if(addResult == 1) {
-	          out.println("alert('블로그가 작성되었습니다.');");
+	          out.println("alert('공지사항이 등록되었습니다.');");
 	          out.println("location.href='" + "/manager/anmt.do';");
 	      } else {
-	          out.println("alert('블로그 작성이 실패했습니다.');");
+	          out.println("alert('공지사항 등록이 실패했습니다.');");
 	          out.println("history.back();");
 	      	}
 	      out.println("</script>");
@@ -270,7 +275,7 @@ public class ManagerServiceImpl implements ManagerService {
 		
 		int totalRecord = managerMapper.getAnmtCount();
 		
-		int recordPerPage = 4;
+		int recordPerPage = 10;
 		
 		pageUtil.setPageUtil(page, totalRecord, recordPerPage);
 		
@@ -294,28 +299,114 @@ public class ManagerServiceImpl implements ManagerService {
 		return anmDTO;
 	}
 	
-	 @Override
-	  public Map<String, Object> imageUpload(MultipartHttpServletRequest multipartRequest) {
-	    
+	@Override
+	public Map<String, Object> imageUpload(MultipartHttpServletRequest multipartRequest) {
+    
 		 MultipartFile multipartFile = multipartRequest.getFile("file");
-	    
+		
 		 String summernoteImagePath = myFileUtil.getSummernoteImagePath();
-	    
+		
 		 File dir = new File(summernoteImagePath);
 		 if(dir.exists() == false) {
 			 dir.mkdirs();
 		 }
-	    
+		
 		 String filesystemName = myFileUtil.getFilesystemName(multipartFile.getOriginalFilename());
-	    
+		
 		 try {
 			 File file = new File(dir, filesystemName);
 			 multipartFile.transferTo(file);
 		 } catch(Exception e) {
 			 e.printStackTrace();
 		 }
+		 
 		 Map<String, Object> map = new HashMap<String, Object>();
 		 map.put("src", "/imageLoad/" + filesystemName);
+		 
 		 return map;
-	  }
+			 
+	}
+	
+	@Override
+	public void removeAnmt(HttpServletRequest request, HttpServletResponse response) {
+		
+		String[] anmNo = request.getParameterValues("anmNo");
+		
+		int removeResult = managerMapper.deleteAnmt(Arrays.asList(anmNo));
+		
+		try {	
+			
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			if(removeResult == anmNo.length) {
+				out.println("alert('선택된 모든 상품이 삭제되었습니다.')");
+				out.println("location.href='" + "/manager/anmt.do'");
+			} else {
+				out.println("alert('선택된 상품이 삭제되지 않았습니다.')");
+				out.println("location.href='" + "/manager/anmt.do'");
+			}
+			out.println("</script>");
+			out.flush();
+			out.close();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Override
+	public void modifyAnmt(HttpServletRequest request, HttpServletResponse response) {
+		
+		String title = request.getParameter("title");
+		String anmContent = request.getParameter("anmContent");
+		int anmNo = Integer.parseInt(request.getParameter("anmNo"));
+		
+		AnnouncementDTO anmDTO = new AnnouncementDTO();
+		anmDTO.setTitle(title);
+		anmDTO.setAnmContent(anmContent);
+		anmDTO.setAnmNo(anmNo);
+		
+		Document document = Jsoup.parse(anmContent);
+	    Elements elements = document.getElementsByTag("img");
+		
+	    if(elements != null) {
+	        for(Element element : elements) {
+	          String src = element.attr("src");
+	          String filesystemName = src.substring(src.lastIndexOf("/") + 1);
+	          SummernoteImageDTO summernoteImageDTO = new SummernoteImageDTO();
+	          summernoteImageDTO.setFilesystemName(filesystemName);
+	          summernoteImageDTO.setBlogNo(anmDTO.getAnmNo());
+	          anmDTO.setImage(filesystemName);
+	          
+	          managerMapper.updateSummernoteImage(summernoteImageDTO);
+	        }
+	    }
+	    
+	    int modifyResult = managerMapper.updateAnmt(anmDTO);
+	    
+	    // 응답
+	    try {
+	      
+	      response.setContentType("text/html; charset=UTF-8");
+	      PrintWriter out = response.getWriter();
+	      out.println("<script>");
+	      if(modifyResult == 1) {
+	          out.println("alert('공지사항이 수정되었습니다.');");
+	          out.println("location.href='" + "/manager/anmt.do';");
+	      } else {
+	          out.println("alert('공지사항 수정이 실패했습니다.');");
+	          out.println("history.back();");
+	      	}
+	      out.println("</script>");
+	      out.flush();
+	      out.close();
+	      
+	      
+	    } catch(Exception e) {
+	      e.printStackTrace();
+	    }
+		
+	}
 }

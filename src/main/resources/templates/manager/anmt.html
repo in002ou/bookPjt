@@ -10,6 +10,10 @@
 		text-align: left;
 	}
 	
+	.registration{
+		text-align: right;
+	}
+	
 	
 </style>
 <script th:inline="javascript">
@@ -22,25 +26,33 @@
 	
 	<div class="wrap">
 		<h1>공지사항</h1>
+		<input type="checkbox" id="chk_all">
 		<a th:href="@{/manager/writeAnmt.html}">공지사항 등록하기</a>
-		<div th:utext="${pagination}"></div>
-		<div class="anmt">
+		<form th:action="@{/manager/removeAnmt.do}" method="post" id="frm_remove">
+			<input type="submit" value="삭제하기">
 			<th:block th:each="anm,vs:${anmtList}">
-				<hr>
-				<span th:text="|${vs.index + 1}. |"></span>
-				<a th:href="@{/manager/anmtDetail.do(anmNo=${anm.anmNo})}" th:text="${anm.title}"></a>
-				<!--  조회수
-				<c:if test="${sessionScope.loginId eq blog.memberDTO.id}">
-                	<a href="${contextPath}/blog/detail.do?blogNo=${blog.blogNo}">${blog.title}</a>
-              	</c:if>
-              	<c:if test="${sessionScope.loginId ne blog.memberDTO.id}">
-                	<a href="${contextPath}/blog/increseHit.do?blogNo=${blog.blogNo}">${blog.title}</a>
-              	</c:if>
-              	-->
-				<br>
+				<div class="anmt">
+					<hr>
+					<div>
+						<input type="checkbox" th:value="${anm.anmNo}" name="anmNo" class="chk_one">&nbsp;&nbsp;&nbsp;
+						<span th:text="|${beginNo - vs.index}. |"></span>
+						<a th:href="@{/manager/anmtDetail.do(anmNo=${anm.anmNo})}" th:text="${anm.title}"></a>
+					</div>
+					<div class="registration"><span th:text="${anm.registration}"></span></div>
+					<!--  조회수
+					<c:if test="${sessionScope.loginId eq blog.userDTO.id}">
+	                	<a href="${contextPath}/blog/detail.do?blogNo=${blog.blogNo}">${blog.title}</a>
+	              	</c:if>
+	              	<c:if test="${sessionScope.loginId ne blog.userDTO.id}">
+	                	<a href="${contextPath}/blog/increseHit.do?blogNo=${blog.blogNo}">${blog.title}</a>
+	              	</c:if>
+	              	-->
+					<br>
+				</div>
 			</th:block>
 			<hr>
-		</div>
+		</form>
+		<div th:utext="${pagination}"></div>
 		<div>
 			<input type="button" value="뒤로가기" onclick="fnBack()">
 		</div>
@@ -48,10 +60,46 @@
   	
   	<script>
   	
+	    // 전체선택 
+	    function fnChkAll(){
+	       $('#chk_all').on('click', function(){
+	          $('.chk_one').prop('checked', $(this).prop('checked'));
+	       })
+	    }
+	    // 개별선택
+	    function fnChkOne(){
+	       let chkOne = $('.chk_one');
+	       chkOne.on('click', function(){
+	          let chkCnt = 0;
+	          for(let i = 0; i < chkOne.length; i++){
+	             chkCnt += $(chkOne[i].prop('checked'));
+	          }
+	          $('#chk_all').prop('checked', chkCnt == chkOne.length);
+	       })
+	    }
+
+  	
 	  	function fnBack(){
 			location.href = '/manager/manager.html';
 		}
-  	
+	  	
+	  	function fnRemoveList(){
+			$('#frm_remove').on('submit', function(event){
+				if($('.chk_one:checked').length == 0){
+					alert('선택된 공지사항이 없습니다.');
+					event.preventDefault();
+					return;
+				}
+				if(confirm('선택한 공지사항을 삭제할까요?') == false){
+					event.preventDefault();
+					return;
+				}
+			})
+		}
+  		
+	  	fnRemoveList();
+	  	fnChkAll();
+	  	fnChkOne();
   	</script>
 
 </body>

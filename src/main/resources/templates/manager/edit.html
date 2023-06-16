@@ -21,16 +21,18 @@
 	<div th:replace="~{layout/header::gnb}"></div>
 	
 	<div class="manager">
-		<h1>공지사항</h1>
-		<form th:action="@{/manager/addAnmt.do}" method="post" id="frmAddQna">
+		<h1>공지사항 편집</h1>
+		<form th:action="@{/manager/modify.do}" method="post" id="frmAddQna">
 			<div>
 				<label for="title"></label>제목
-				<input type="text" name="title" id="title" required="required">
+				<input type="text" name="title" id="title" th:value="${anmDTO.title}">
 			</div>
 			
-			<div><label for="content">내용</label></div>
-           	<textarea id="anmContent" name="anmContent"></textarea> <!-- summernote 편집기로 바뀌는 textarea -->
-			<button>작성완료</button>
+			<div><label for="content">내용</label>
+	           	<textarea id="anmContent" name="anmContent" th:text="${anmDTO.anmContent}"></textarea> <!-- summernote 편집기로 바뀌는 textarea -->
+			</div>
+			<input type="hidden" th:value="${anmDTO.anmNo}" name="anmNo">
+			<button>편집완료</button>
 			<input type="button" value="뒤로가기" onclick="fnBack()">
 		</form>
 	</div>
