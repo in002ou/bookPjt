@@ -15,6 +15,7 @@
 		<typeAlias alias="UserDTO" type="com.gdu.book.domain.UserDTO" />
 		<typeAlias alias="AnnouncementDTO" type="com.gdu.book.domain.AnnouncementDTO" />
 		<typeAlias alias="BookDTO" type="com.gdu.book.domain.BookDTO" />
+		<typeAlias alias="BookSearchDTO" type="com.gdu.book.domain.BookSearchDTO" />
 		<typeAlias alias="BookReviewDTO" type="com.gdu.book.domain.BookReviewDTO" />
 		<typeAlias alias="CartDetailDTO" type="com.gdu.book.domain.CartDetailDTO" />
 		<typeAlias alias="CartDTO" type="com.gdu.book.domain.CartDTO" />

@@ -6,11 +6,11 @@
 </script>
 <style>
 	.bookListAll {
-		min-height: 700px;
-		margin:170px 50px 0px 50px;
-		border:1px solid black;
+		min-height: 300px;
+		margin:0px 50px 0px 50px;
 	}
 	.bookListHeader {
+		margin:170px 50px 0px 50px;
 		display: flex;
 	}
 	.book{
@@ -54,31 +54,57 @@
 	function fnSearch(){
 		$('#btnSearch').on('click', function(){
 			$.ajax({
-				type : 'get',
-				url : 'book/bookSearch.do',
-				data : ('#bookSearch').serialize(),
-				dataType : 'json',
-				success : function(resData){
-					
+				type: 'get',
+				url: '/book/bookSearch.do',
+				data: $('#bookSearch').serialize(),
+				dataType: 'json',
+				success: function(resData){
+					$('.searchBookList').empty();
+					alert(resData.message);
+					$('.bookListAll').hide();
+					if(resData.list != ''){
+						$.each(resData.list, function(i, book){
+							let str = '<div class="bookListAll">';
+							str += '<div class="book">';
+							str += '<div class="bookImage"><a href="/book/bookDetail.do?bookNo=' + book.bookNo + '"><img src="' + book.bookImage + '"></a></div>';
+							str += '<div class="bookDetail">';
+							str += '<a href="/book/bookDetail.do?bookNo=' + book.bookNo + '"><strong>제목 : ' +  book.bookTitle + '</strong></a>';
+							str += '<div style="margin-top: 10px;"><p>저자 : ' + book.bookAuthor + '</p></div>';
+							str += '<div style="margin-top: 10px;"><p>출간일자 : ' + book.bookAt + '</p></div>';
+							str += '<div style="margin-top: 10px;"><p>줄거리 : </p><div class="bookDescription" style="margin-top: 10px;">' + book.bookDescription + '</div></div></div>';
+							str += '<div class="btnCart"><form method="post" action="/cart/addCart.do">';
+							str += '<input type="hidden" value="1" name="userNo"><input type="hidden" value="1" name="count">';
+							str += '<input type="hidden" value="' + book.bookNo + '" name="bookNo">';
+							str += '<p>' + book.bookPrice + '원</p><button>장바구니 담기</button></form></div></div>';
+							$('.searchBookList').append(str);
+						})
+					} else if(resData.list == null){
+						return;
+					}
 				}
 			})
 		})
-		
-		
 	}
+	
+	function fnList(){
+		location.href = '/book/bookList.html';
+	}
+	
+	$(function(){
+		fnSearch();
+	})
 
 </script>
 <body>
 
 	<div th:replace="~{layout/header::gnb}"></div>
-		<div class="bookListAll">
 			<div class="bookListHeader">
 				<div><h1>도서 목록</h1></div>
 				<div>
-					<form class="bookSearch">
+					<form id="bookSearch">
 						<select id="column" name="column">
-					    	<option value="TITLE">제목</option>
-					        <option value="AUTHOR">저자</option>
+					    	<option value="BOOK_TITLE">제목</option>
+					        <option value="BOOK_AUTHOR">저자</option>
 					    </select>
 					     <input type="text" name="searchText">
 					     <input type="button" id="btnSearch" value="검색">
@@ -86,6 +112,7 @@
 					</form>
 				</div>
 			</div>
+		<div class="bookListAll">
 			<th:block th:each="bookList,vs:${bookList}">
 				<div class="book">
 					<div class="bookImage">
@@ -118,6 +145,7 @@
 			</th:block>
 			<div class="pagination" th:utext="${pagination}"></div>
 		</div>
+		<div class="searchBookList"></div>
 	<div th:replace="~{layout/footer::foot}"></div>
 	
 </body>

@@ -31,7 +31,11 @@
 		LIMIT #{begin}, #{recordPerPage}
 	</select>
 	
-	<select id="searchBook" parameterType=""></select>
+	<select id="searchBook" parameterType="BookSearchDTO" resultType="BookDTO">
+		SELECT BOOK_NO, BOOK_TITLE, BOOK_PRICE, BOOK_AT, BOOK_AUTHOR, BOOK_IMAGE, BOOK_DESCRIPTION
+		  FROM BOOK_T
+		 WHERE ${column} LIKE CONCAT('%', #{searchText}, '%')
+	</select>
 
 	<select id="selectBookDetail" parameterType="String" resultType="BookDTO">
 		SELECT *
