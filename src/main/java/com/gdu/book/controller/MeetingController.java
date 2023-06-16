@@ -53,7 +53,8 @@ public class MeetingController {
 	}
 	
 	@GetMapping("/detail.html")
-	public String screen() {
+	public String detail(HttpServletRequest request, Model model) {
+		meetingService.getMeetingByNo(request, model);
 		return "meeting/detail";
 	}
 	

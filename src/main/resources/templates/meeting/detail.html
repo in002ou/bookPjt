@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/header::head('친목')}"></head>
+<head th:replace="~{layout/verticalGnb::head('모임활동')}"></head>
 <script>
 
 </script>
@@ -39,20 +39,29 @@
         height: 50%;
         background-color: #c0c0c0;
     }
-
+img {
+	width: 300px;
+}
 </style>
 </head>
 <body>
 
-	<div th:replace="~{layout/header::gnb}"></div>
+	<div class="gnb">
+		<div th:replace="~{layout/verticalGnb::gnb}"></div>
+	</div>
 
     <div class="container">
     
         <div class="top-left">
-        	
+        	<img alt="대표이미지" th:src="@{${meeting.image}}">
+        	<span th:text="${meeting.meetingName}"></span>
+        	<strong>모집 인원 </strong><span th:text="|/${meeting.capacity}|"></span>	<!-- 현재 인원 추가 예정 -->
+        	<strong>모집기간 </strong><span th:text="${meeting.meetingStartAt meeting.meetingEndAt}"></span>
         </div>
         
-        <div class="top-right"></div>
+        <div class="top-right">
+        	
+        </div>
         
         <div class="bottom-left"></div>
         

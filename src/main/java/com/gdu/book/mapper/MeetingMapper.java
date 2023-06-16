@@ -13,4 +13,5 @@ public interface MeetingMapper {
 	public int getMeetingCount();
 	public List<MeetingDTO> loadMeetingList(Map<String, Object> map);
 	public int createMeeting(MeetingDTO meetingDTO);
+	public MeetingDTO getMeetingByNo(Map<String, Object> map);
 }

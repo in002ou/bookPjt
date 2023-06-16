@@ -13,4 +13,5 @@ import com.gdu.book.domain.MeetingDTO;
 public interface MeetingService {
 	public int createMeeting(MultipartHttpServletRequest multipartRequest);
 	public Map<String, Object> loadMeetingList(HttpServletRequest request);
+	public void getMeetingByNo(HttpServletRequest request, Model model);
 }

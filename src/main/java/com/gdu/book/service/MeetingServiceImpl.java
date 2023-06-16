@@ -101,7 +101,7 @@ public class MeetingServiceImpl implements MeetingService {
 			
 			Random random = new Random();
 			int randomNum = random.nextInt(6) + 1;
-			String defaultImagePath = "/static/img/book" + randomNum + ".jpg";
+			String defaultImagePath = "/img/book" + randomNum + ".jpg";
 			meetingDTO.setImage(defaultImagePath);
 			meetingMapper.createMeeting(meetingDTO);
 			
@@ -134,6 +134,22 @@ public class MeetingServiceImpl implements MeetingService {
 		resultMap.put("totalPage", pageUtil.getTotalPage());
 		
 		return resultMap;
+		
+	}
+	
+	@Override
+	public void getMeetingByNo(HttpServletRequest request, Model model) {
+		int userNo = Integer.parseInt(request.getParameter("userNo"));
+		int meetingNo = Integer.parseInt(request.getParameter("meetingNo"));
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("userNo", userNo);
+		map.put("meetingNo", meetingNo);
+		
+		MeetingDTO meetingDTO = new MeetingDTO();
+		meetingDTO = meetingMapper.getMeetingByNo(map);
+		
+		model.addAttribute("meeting", meetingDTO);
 		
 	}
 	
