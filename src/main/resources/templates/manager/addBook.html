@@ -34,10 +34,9 @@
 		dataType: 'json',
 		success: function(resData){
 			$('#bookList').empty();
-				var str = '';
-				console.log(resData.items[0].isbn);
+			var str = '';
 			$.each(resData.items, function(i, book){
-				// $('#book').attr('th:action','@{/manager/addBook.do}');
+				// $('.book').attr('th:action','@{/manager/addBook.do}');
 				str += '<form class="book">' + '<image src="' + book.image + '" width="200px">';
 				str += '<br>';
 				str += '</div>';

@@ -34,4 +34,8 @@ public interface ManagerMapper {
 	public List<AnnouncementDTO> selectAnmt(Map<String, Object> map);
 	public int getAnmtCount();
 	public AnnouncementDTO anmtDetail(int anmNo);
+	public int deleteAnmt(List<String> anmNo);
+	public int updateAnmt(AnnouncementDTO anoDTO);
+	public int updateSummernoteImage(SummernoteImageDTO summernoteImageDTO);
+	
 }

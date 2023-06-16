@@ -107,5 +107,23 @@ public class ManagerController {
 		return managerService.imageUpload(multipartRequest);
 	}
 	
+	@PostMapping("/removeAnmt.do")
+	public void removeAnmt(HttpServletRequest request, HttpServletResponse response) {
+		managerService.removeAnmt(request, response);
+		
+	}
+	
+	@GetMapping("/edit.do")
+	public String edit(@RequestParam(value="anmNo", required=false, defaultValue="0") int anmNo
+            			, Model model) {
+		model.addAttribute("anmDTO", managerService.anmtDetail(anmNo));
+		return "manager/edit";
+	}
+	
+	@PostMapping("/modify.do")
+	public void modify(HttpServletRequest request, HttpServletResponse response) {
+		
+		managerService.modifyAnmt(request, response);
+	}
 	
 }

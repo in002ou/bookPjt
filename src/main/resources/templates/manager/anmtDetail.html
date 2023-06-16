@@ -24,24 +24,31 @@
 	
 	<div th:replace="~{layout/header::gnb}"></div>
 	
-	<div class="wrap">
+	<div class="wrap" id="detail_screen">
 		<h1>공지사항</h1>
 		<div class="anmt">
 			<div th:text="${anmDTO.title}"></div>
-			<div th:utext="${anmDTO.anmContent}"></div>
 			<div th:text="${anmDTO.registration}"></div>
-			<div th:text="${anmDTO.image}"></div>
 			<div th:text="${anmDTO.anmCount}"></div>
+			<hr>
+			<div th:utext="${anmDTO.anmContent}"></div>
 			<input type="button" value="뒤로가기" onclick="fnBack()">
+			<input type="button" value="편집하기" onclick="fnEdit()">
 		</div>
 	</div>
+	
   	
-  	<script>
+  	<script th:inline="javascript">
   	
+	  	function fnEdit(){
+	  		let anmNo = /*[[${anmDTO.anmNo}]]*/ null; 
+			location.href = '/manager/edit.do?anmNo=' + anmNo;
+		}
+	  	
 	  	function fnBack(){
 			history.back();
 		}
-  	
+	  	
   	</script>
 
 </body>
