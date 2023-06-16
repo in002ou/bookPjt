@@ -212,7 +212,7 @@
 				// 이메일 중복체크
 				$.ajax({
 					type:'get',
-					url: '$/user/verifyEmail.do',
+					url: '/user/verifyEmail.do',
 					data: 'userEmail=' + userEmail,
 					dataType: 'json',
 					success: function(resData){    // resData = {"enableEmail": true} 또는 {"enableEmail": false}
@@ -229,7 +229,7 @@
 				
 				$.ajax({
 						type:'get',
-						url: '$/user/sendAuthCode.do',
+						url: '/user/sendAuthCode.do',
 						data: 'userEmail=' + userEmail,
 						dataType: 'json',
 						success: function(resData){ // resData = {"authCode": "6T43G9"}  사용자에게 전송한 인증코드를 의미
@@ -271,10 +271,75 @@
 	}
 	
 	// 8. submit (회원가입)
+	function fnJoin(){
+		
+		$('#frmJoin').on('submit', function(event){
+			
+			if(verifyId == false){
+				alert('아이디를 확인하세요.');
+				event.preventDefault();
+				return;
+			} else if(verifyPw == false || verifyRePw == false){
+				alert('비밀번호를 확인하세요.');
+				event.preventDefault();
+				return;
+			} else if(verifyName == false){
+				alert('이름을 확인하세요.');
+				event.preventDefault();
+				return;
+			} else if($('#userBirthyear').val() == '' || $('#userBirthmonth').val() == '' || $('#userBirthdate').val() == ''){
+				alert('생년월일을 확인하세요.');
+				event.preventDefault();
+				return;
+			} else if(verifyEmail == false){
+				alert('가입을 위해서 이메일 인증이 필요합니다.');
+				event.preventDefault();
+				return;
+			}
+		})
+		
+	}
+	
+	// 함수 호출
+	$(function(){
+		  fnCancel();
+		  fnCheckId();
+		  fnCheckPw();
+		  fnCheckPwAgain();
+		  fnCheckName();
+		  fnCheckMobile();
+		  fnCreateDate();
+		  fnCheckEmail();
+		  fnJoin();
+	  })
 		
 		
 </script>
 <body>
+
+	<div class="join">
+	
+		<h1> 회원가입 페이지 </h1>
+		
+		<div>* 표시는 필수 입력사항입니다 *</div>
+		
+		<hr>
+		
+		<form id = "frmJoin" method="post" th:action="@{/user/join.do}">
+		
+			<!-- agree.jsp에서 전달된 location, event 속성 -->
+			<input type="hidden" name="location" th:value="${location}">
+			<input type="hidden" name="event" th:value="${event}">
+			
+			<div>
+				<label for="userId">아이디*</label>
+				<input type="text" name="userId" id="userId">
+				<span id ="msgId"></span>
+			</div>
+			
+		</form>
+
+	</div>
 
 </body>
 </html>
