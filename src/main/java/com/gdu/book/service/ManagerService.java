@@ -34,4 +34,6 @@ public interface ManagerService {
 	public void selectAnmt(HttpServletRequest request, Model model);
 	public AnnouncementDTO anmtDetail(int anmNo);
 	public Map<String, Object> imageUpload(MultipartHttpServletRequest multipartRequest);
+	public void removeAnmt(HttpServletRequest request, HttpServletResponse response);
+	public void modifyAnmt(HttpServletRequest request, HttpServletResponse response);
 }

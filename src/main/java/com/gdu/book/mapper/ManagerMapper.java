@@ -12,7 +12,7 @@ import com.gdu.book.domain.SummernoteImageDTO;
 
 @Mapper
 public interface ManagerMapper {
-
+	
 	// 책 등록
 	public int addBook(BookDTO bookDTO);
 	
@@ -26,7 +26,6 @@ public interface ManagerMapper {
 	
 	// Qna 답변
 	public int answerQna(QnaDTO qnaDTO);
-	
 	public int deleteQna(int qnaNo);
 	
 	// 공지사항
@@ -35,4 +34,8 @@ public interface ManagerMapper {
 	public List<AnnouncementDTO> selectAnmt(Map<String, Object> map);
 	public int getAnmtCount();
 	public AnnouncementDTO anmtDetail(int anmNo);
+	public int deleteAnmt(List<String> anmNo);
+	public int updateAnmt(AnnouncementDTO anoDTO);
+	public int updateSummernoteImage(SummernoteImageDTO summernoteImageDTO);
+	
 }

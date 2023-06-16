@@ -29,9 +29,9 @@
 	    let addResult = /*[[${addResult}]]*/ null;  // addResult가 전달되지 않는 경우 null을 사용한다.
 	    if(addResult !== null){
 	      if(addResult === 2) {
-	        alert('원글이 달렸습니다.');
+	        alert('문의가 달렸습니다.');
 	      } else {
-	        alert('원글 달기가 실패했습니다.');
+	        alert('문의 달기에 실패했습니다.');
 	      }
 	    }
 		
@@ -39,9 +39,9 @@
 	    let removeResult = /*[[${removeResult}]]*/ null;  // removeResult가 전달되지 않는 경우 null을 사용한다.
 	    if(removeResult !== null){
 	      if(removeResult === 1) {
-	        alert('게시글이 삭제되었습니다.');
+	        alert('문의가 삭제되었습니다.');
 	      } else {
-	        alert('게시글 삭제가 실패했습니다.');
+	        alert('문의 삭제가 실패했습니다.');
 	      }
 	    }
 		
@@ -49,15 +49,15 @@
 	    let updateResult = /*[[${updateResult}]]*/ null;  // addReplyResult가 전달되지 않는 경우 null을 사용한다.
 	    if(updateResult !== null){
 	      if(updateResult === 1) {
-	        alert('답글이 달렸습니다.');
+	        alert('답변이 달렸습니다.');
 	      } else {
-	        alert('답글 달기가 실패했습니다.');
+	        alert('답변 달기가 실패했습니다.');
 	      }
 	    }
 		
 		// 삭제 버튼 이벤트
 		$('.frm_remove').on('submit', function(ev){
-			if(confirm('BBS를 삭제할까요?') == false){
+			if(confirm('문의를 삭제할까요?') == false){
 				ev.preventDefault();
 				return;
 			}

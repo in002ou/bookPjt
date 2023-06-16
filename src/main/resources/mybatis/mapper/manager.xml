@@ -93,6 +93,29 @@
         	#{filesystemName}
       	  , #{blogNo}
     		)
- 	 </insert>
+	</insert>
 	
+	<delete id="deleteAnmt" parameterType="List">
+		DELETE
+		  FROM ANNOUNCEMENT_T
+		  <where>
+		  	<foreach collection="list" item="anmNo" open="ANM_NO IN(" separator="," close=")">
+				#{anmNo}
+			</foreach>
+		  </where>
+	</delete>
+	
+	<update id="updateAnmt" parameterType="AnnouncementDTO">
+		UPDATE ANNOUNCEMENT_T
+		   SET TITLE = #{title}, ANM_CONTENT = #{anmContent}, REGISTRATION = NOW()
+		 WHERE ANM_NO = #{anmNo}
+	</update>
+	
+	<update id="updateSummernoteImage" parameterType="SummernoteImageDTO">
+    	UPDATE SUMMERNOTE_IMAGE_T
+    	   SET FILESYSTEM_NAME = #{filesystemName}
+    	 WHERE BLOG_NO = #{blogNo} 
+	</update>
+	
+ 	 
 </mapper>
