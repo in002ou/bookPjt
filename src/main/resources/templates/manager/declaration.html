@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/header::head('관리자 페이지')}"></head>
+<style>
+	.manager{
+		margin-top: 170px;
+	}
+
+	.wrap {
+		text-align: center;
+	}
+	
+	
+	
+	
+</style>
+<body>
+
+	
+	<div th:replace="~{layout/header::gnb}"></div>
+	
+	<div class="wrap">
+		<h1>신고하기</h1>
+		<div>
+			<form method="post" th:action="@{/manager/addDec.do}">
+				<div>
+					<label for="decGubun">신고사유</label>
+					<select name="decGubun" id="decGubun">
+						<option selected>신고사유를 선택해주세요</option>
+						<option value="1">심한 욕설, 비하 발언</option>
+						<option value="2">홍보 게시글</option>
+						<option value="3">음란발설</option>
+						<option value="4">기타사유</option>
+					</select>
+				</div>
+				<div>
+					<div>내용</div>
+					<textarea rows="20" cols="60" name="decContent" id="decContent"></textarea>
+				</div>
+				<input type="hidden" value="1" name="userNo">
+				<input type="hidden" value="2" name="receivedUserNo">
+				<button>신고하기</button>
+			</form>
+		</div>
+	</div>
+
+  	
+  	<script>
+  	
+	  	
+  	
+  	</script>
+
+</body>
+</html>
