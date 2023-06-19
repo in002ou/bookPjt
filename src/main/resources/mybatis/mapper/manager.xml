@@ -31,8 +31,8 @@
   	</select>
 	
 	<select id="selectQnaList" resultMap="QnaMap" parameterType="Map">
-		SELECT A.QNA_NO, A.USER_ID, A.TITLE, A.ANSWER, A.QNA_STATE, A.ANSWER_AT, A.DEPTH, A.GROUP_NO
-      	  FROM (SELECT Q.QNA_NO, U.USER_ID, Q.TITLE, Q.ANSWER, Q.QNA_STATE, Q.ANSWER_AT, Q.DEPTH, Q.GROUP_NO
+		SELECT A.QNA_NO, A.USER_ID, A.USER_NAME,  A.TITLE, A.ANSWER, A.QNA_STATE, A.ANSWER_AT, A.DEPTH, A.GROUP_NO
+      	  FROM (SELECT Q.QNA_NO, U.USER_ID, U.USER_NAME, Q.TITLE, Q.ANSWER, Q.QNA_STATE, Q.ANSWER_AT, Q.DEPTH, Q.GROUP_NO
                   FROM QNA_T Q INNER JOIN USER_T U
                     ON Q.USER_NO = U.USER_NO) A
      	 ORDER BY GROUP_NO DESC
@@ -117,5 +117,23 @@
     	 WHERE BLOG_NO = #{blogNo} 
 	</update>
 	
+	<insert id="addDec" parameterType="DeclarationDTO" useGeneratedKeys="true" keyProperty="declarationNo">
+		INSERT INTO DECLARATION_T (
+				 USER_NO
+			   , BOOK_REVIEW_NO
+			   , DECLARATION_GUBUN
+			   , DECLARATION_CONTENT
+			   , DECLARATION_AT
+			   , DEC_STATE
+			   , RECEIVED_USER_NO)
+			VALUES (
+			   , #{userNo}
+			   , #{bookReviewNo}	
+			   , #{declarationContent}
+			   , #{declarationAt}
+			   , #{descState}
+			   , #{receivedUserNo}
+				)
+	</insert>
  	 
 </mapper>

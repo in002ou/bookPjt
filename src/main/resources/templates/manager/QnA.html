@@ -18,6 +18,10 @@
 		display: none;		/* 완전히 화면에서 없애버린다. */
 	}
 	
+	.pagination{
+		letter-spacing: 8px;
+	}
+	
 	
 </style>
 
@@ -103,33 +107,40 @@
 	<div th:replace="~{layout/header::gnb}"></div>
 	
 	<div class="wrap">
-		<a th:href="@{/manager/writeQna.html}" id="QnaList">작성하기</a> 
+		<th:block th:if="${session.userId != 'admin'}">
+			<a th:href="@{/manager/writeQna.html}" id="QnaList">작성하기</a> 
+		</th:block>
 		<h1>1:1 문의</h1>
-		<div th:utext="${pagination}"></div>
+		<div th:utext="${pagination}" class="pagination"></div>
 		<th:block th:each="qna,vs:${qnaList}">
 			<hr>
 			<div class="qna list">
 				<div>
-					<span th:text="${qna.userDTO.userId}"></span>
+					<span th:text="|${qna.userDTO.userId}님: &nbsp;|"></span>
 					<span th:text="${qna.title}"></span>
 					<br>
 					<br>
 					<div>
 						<th:block th:if="${qna.qnaState == 1}"><span>!!!</span> </th:block>
 						<br>
-						<span><input type="button" value="답변 보기" class="btn_reply"> </span>
-						<th:block th:if="${qna.qnaState == 2}">
-							<span><input type="button" value="답변 수정하기" class="btn_answer"> </span>
-						</th:block>
-						<th:block th:if="${qna.qnaState == 1}">
-							<span><input type="button" value="답변 달기" class="btn_answer"> </span>
-						</th:block>
-						<!-- <th:block th:if="${session.loginId == bbs.writer}"> -->
+						<th:block th:if="${session.userId != 'admin'}">
+							<span><input type="button" value="답변 보기" class="btn_reply"> </span>
 							<form class="frm_remove" method="post" th:action="@{/manager/remove.do}">
 								<input type="hidden" name="qnaNo" th:value="${qna.qnaNo}">
-								<button>삭제</button>
+								<button class="btn_remove">삭제</button>
 							</form>
-						<!-- </th:block> -->
+						</th:block>
+						<th:block th:if="${session.userId == 'admin'}">
+							<th:block th:if="${qna.qnaState == 2}">
+								<span><input type="button" value="답변 수정하기" class="btn_answer"> </span>
+							</th:block>
+							<th:block th:if="${qna.qnaState == 1}">
+								<span><input type="button" value="답변 달기" class="btn_answer"> </span>
+							</th:block>
+						</th:block>
+						<th:block th:if="${session.loginId != admin}"> 
+							
+						 </th:block> 
 					</div>
 				</div>
 			</div>
@@ -138,7 +149,7 @@
 					<div>
 						<label for="answer">답변</label>
 						<br>
-						<textarea rows="10" cols="50" id="answer" name="answer" placeholder="답변 내용을 입력해주세요" required="required"></textarea>
+						<textarea rows="10" cols="50" id="answer" name="answer" placeholder="답변 내용을 입력해주세요" required="required" th:text="${qna.answer}"></textarea>
 						<input type="hidden" name="qnaNo" th:value="${qna.qnaNo}">
 						<input type="hidden" name="depth" th:value="${qna.depth + 1}">
 						<input type="hidden" name="groupNo" th:value="${qna.groupNo}">

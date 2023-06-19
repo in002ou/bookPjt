@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DeclarationDTO {
  private int declarationNo;
- private UserDTO userDTO;
- private BookReviewDTO bookReviewDTO;
+ private int userNo;
+ private int bookReviewNo;
  private String declarationContent;
  private Date declarationAt;
  private int descState;

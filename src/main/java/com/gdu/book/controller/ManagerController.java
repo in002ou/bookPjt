@@ -96,8 +96,8 @@ public class ManagerController {
 	
 	@GetMapping("/anmtDetail.do")
 	public String anmtDetail(@RequestParam(value="anmNo", required=false, defaultValue="0") int anmNo
-            , Model model) {
-		model.addAttribute("anmDTO", managerService.anmtDetail(anmNo));
+            , HttpServletRequest request, Model model) {
+		model.addAttribute("anmDTO", managerService.anmtDetail(anmNo, request, model));
 		return "manager/anmtDetail";
 	}
 	
@@ -115,8 +115,8 @@ public class ManagerController {
 	
 	@GetMapping("/edit.do")
 	public String edit(@RequestParam(value="anmNo", required=false, defaultValue="0") int anmNo
-            			, Model model) {
-		model.addAttribute("anmDTO", managerService.anmtDetail(anmNo));
+            			, HttpServletRequest request, Model model) {
+		model.addAttribute("anmDTO", managerService.anmtDetail(anmNo, request, model));
 		return "manager/edit";
 	}
 	
@@ -124,6 +124,17 @@ public class ManagerController {
 	public void modify(HttpServletRequest request, HttpServletResponse response) {
 		
 		managerService.modifyAnmt(request, response);
+	}
+	
+	@PostMapping("/declaration.html")
+	public String declaration() {
+		return "manager/declaration";
+	}
+	
+	@PostMapping("/addDec.do")
+	public String addDec(HttpServletRequest request, HttpServletResponse response) {
+		
+		return null;
 	}
 	
 }

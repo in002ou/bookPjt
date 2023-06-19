@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -166,7 +167,9 @@ public class ManagerServiceImpl implements ManagerService {
 	@Override
 	public int addQna(HttpServletRequest request) {
 		UserDTO userDTO = new UserDTO();
-		userDTO.setUserNo(1);
+		HttpSession session = request.getSession();
+		int userNo = (int)session.getAttribute("userNo");
+		userDTO.setUserNo(userNo);
 		String title = request.getParameter("title");
 		int qnaState = 1;
 		QnaDTO qnaDTO = new QnaDTO();
@@ -292,9 +295,28 @@ public class ManagerServiceImpl implements ManagerService {
 	}
 	
 	@Override
-	public AnnouncementDTO anmtDetail(int anmNo) {
+	public AnnouncementDTO anmtDetail(int anmNo, HttpServletRequest request, Model model) {
 		
 		AnnouncementDTO anmDTO = managerMapper.anmtDetail(anmNo);
+		
+		Optional<String> opt1 = Optional.ofNullable(request.getParameter("page"));
+		int page = Integer.parseInt(opt1.orElse("1"));
+		
+		int totalRecord = managerMapper.getAnmtCount();
+		
+		int recordPerPage = 10;
+		
+		pageUtil.setPageUtil(page, totalRecord, recordPerPage);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("begin", pageUtil.getBegin());
+		map.put("recordPerPage", recordPerPage);
+		
+		List<AnnouncementDTO> list = managerMapper.selectAnmt(map);
+		
+		model.addAttribute("anmtList", list);
+		model.addAttribute("beginNo", totalRecord - (page - 1) * recordPerPage);
+		model.addAttribute("pagination", pageUtil.getPagination("/manager/anmt.do"));
 		
 		return anmDTO;
 	}
@@ -407,6 +429,17 @@ public class ManagerServiceImpl implements ManagerService {
 	    } catch(Exception e) {
 	      e.printStackTrace();
 	    }
+		
+	}
+	
+	@Override
+	public void addDec(HttpServletRequest request, HttpServletResponse response) {
+		
+		int userNo = 1;
+		int bookReviewNo = 1;
+		int decGubun = Integer.parseInt(request.getParameter("decGubun"));
+		String decContent = request.getParameter("decContent");
+		
 		
 	}
 }
