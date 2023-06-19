@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.gdu.book.domain.BookDTO;
@@ -106,6 +107,7 @@ public class CartServiceImpl implements CartService {
 		
 	}
 	
+	@Transactional
 	@Override
 	public Map<String, Object> cartUp(HttpServletRequest request) {
 		
