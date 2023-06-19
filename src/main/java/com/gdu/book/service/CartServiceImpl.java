@@ -2,7 +2,9 @@ package com.gdu.book.service;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -88,7 +90,7 @@ public class CartServiceImpl implements CartService {
 	
 	@Override
 	public void getcartDetail(HttpServletRequest request, Model model) {
-		int userNo = 1;
+		int userNo = 1;	// sessionScope 이용해야함
 		
 		List<CartDTO> cartList = cartMapper.selectCartList(userNo);
 		int totalPrice = 0;
@@ -102,6 +104,26 @@ public class CartServiceImpl implements CartService {
 		model.addAttribute("totalPrice", totalPrice);
 		model.addAttribute("cartList", cartList);
 		
+	}
+	
+	@Override
+	public Map<String, Object> cartUp(HttpServletRequest request) {
+		
+		int cartNo = Integer.parseInt(request.getParameter("cartNo"));
+		CartDTO cartList = cartMapper.selectCartByNo(cartNo);
+		int count =  cartList.getCount();
+		count++;
+		
+		CartDTO cartDTO = new CartDTO();
+		cartDTO.setCount(count);
+		cartDTO.setCartNo(cartNo);
+		cartMapper.updateCount(cartDTO);
+		
+		CartDTO cartUpdateList = cartMapper.selectCartByNo(cartNo);
+		Map<String, Object> map = new HashMap<>();
+		map.put("cartUpdate", cartUpdateList);
+		
+		return map;
 	}
 
 }

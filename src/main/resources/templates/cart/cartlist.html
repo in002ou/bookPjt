@@ -149,6 +149,7 @@
 	}
 	
 	.cart__bigorderbtn {
+	  cursor: pointer;
 	  width: 200px;
 	  height: 50px;
 	  font-size: 16px;
@@ -200,12 +201,14 @@
 		                            <strong th:text="${cartlist.bookDTO.bookPrice}"></strong>
 		                        </td>
 		                        <td>
-		                        	<div>
+		                        	<div id="count">
 			                        	<strong th:value="${cartlist.count}" class="count" th:text="${cartlist.count}"></strong>
 		                        	</div>
+		                        	<div id="newCount">
+		                        	</div>
 		                        	<div>
-		                        		<a th:href="@{/cart/countDown.do(cartNo=${cartlist.cartNo})}">-</a>
-		                        		<a th:href="@{/cart/countUp.do(cartNo=${cartlist.cartNo})}">+</a>
+		                        		<a href="#" onclick="fnDisAddcount()" th:data-cartno="${cartlist.cartNo}">-</a>
+		                        		<a href="#" onclick="fnAddcount(this)" th:data-cartno="${cartlist.cartNo}">+</a>
 		                        	</div>
 		                        </td>
 		                        <td>무료</td>
@@ -300,6 +303,23 @@
 	            
 	        }
 	    });
+	    
+	}
+	function fnAddcount(element){
+ 		var cartNo = $(element).data('cartno');
+		console.log(cartNo);
+		$.ajax({
+			type: 'post',
+			url: '/cart/countUp.do',
+			data: 'cartNo=' + cartNo,
+			dataType: 'json',
+			success: function(resData){
+				$('.newCount').empty();
+				$('.count').hide();
+				let str = '<strong class="count">'+ resData.cartUpdate.count +'</strong>';
+				$('.newCount').append(str);
+			}
+		})
 	}
 	
 </script>

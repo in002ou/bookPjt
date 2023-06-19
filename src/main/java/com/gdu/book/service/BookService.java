@@ -16,4 +16,6 @@ public interface BookService {
 	public void getBookDetail(HttpServletRequest request, Model model);
 	public int addBookReview(HttpServletRequest request);
 	public int deleteBookReview(HttpServletRequest request);
+	public int bookLike(HttpServletRequest request, Model model);
+	public int bookDisLike(HttpServletRequest request, Model model);
 }

@@ -53,6 +53,16 @@
 		</where>
 	</delete>
 	
+	<select id="selectCartByNo" parameterType="int" resultType="CartDTO">
+	 	SELECT COUNT
+	 	  FROM CART_T
+	 	 WHERE CART_NO = #{cartNo}
+	</select>
 	
+	<update id="updateCount" parameterType="CartDTO" >
+		UPDATE CART_T
+		   SET COUNT = #{count}
+		 WHERE CART_NO = #{cartNo}
+	</update>
 	
 </mapper>

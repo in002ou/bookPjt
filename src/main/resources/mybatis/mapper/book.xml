@@ -72,5 +72,49 @@
 		 WHERE BOOK_REVIEW_NO = #{bookReviewNo}
 	</delete>
 	
+	<insert id="addBookLike" parameterType="UserRecommenedDTO">
+		INSERT INTO USER_RECOMMENED_T(
+			USER_NO
+		  , BOOK_NO
+		  , RECOMMENED
+		) VALUES (
+			#{userDTO.userNo}
+		  , #{bookDTO.bookNo}
+		  , #{recommened}
+		)
+	</insert>
+	
+	<insert id="addBookDisLike" parameterType="UserRecommenedDTO">
+		INSERT INTO USER_RECOMMENED_T(
+			USER_NO
+		  , BOOK_NO
+		  , RECOMMENED
+		) VALUES (
+			#{userDTO.userNo}
+		  , #{bookDTO.bookNo}
+		  , #{recommened}
+		)
+	</insert>
+	
+	<select id="selectUserLike" parameterType="UserRecommenedDTO" resultType="UserRecommenedDTO">
+		SELECT *
+		  FROM USER_RECOMMENED_T
+		 WHERE USER_NO = #{userDTO.userNo} AND BOOK_NO = #{bookDTO.bookNo}
+	</select>
+	
+	<update id="updateUserLike" parameterType="UserRecommenedDTO">
+		UPDATE USER_RECOMMENED_T
+		   SET RECOMMENED = 1
+		 WHERE USER_NO = #{userDTO.userNo} AND BOOK_NO = #{bookDTO.bookNo}
+	</update>
+	
+	<update id="updateUserDisLike" parameterType="UserRecommenedDTO">
+		UPDATE USER_RECOMMENED_T
+		   SET RECOMMENED = -1
+		 WHERE USER_NO = #{userDTO.userNo} AND BOOK_NO = #{bookDTO.bookNo}
+	</update>
+	
+	
+	
 	
 </mapper>

@@ -10,11 +10,18 @@
 		margin:0px 50px 0px 50px;
 	}
 	.bookListHeader {
-		margin:170px 50px 0px 50px;
+		width: 1400px;
+		margin:170px 70px 0px 50px;
 		display: flex;
+		text-align: center;
+		border-bottom: 1px solid #d5d5d5;
+	}
+	.searchBar {
+		position: relative;
+		left: 950px;
 	}
 	.book{
-		width: 100%;
+		width: 1400px;
 		height: 250px;
 		border-bottom: 1px solid #d5d5d5;
 		display: flex;
@@ -99,8 +106,10 @@
 
 	<div th:replace="~{layout/header::gnb}"></div>
 			<div class="bookListHeader">
-				<div><h1>도서 목록</h1></div>
 				<div>
+					<h1>도서 목록</h1>
+				</div>
+				<div class="searchBar">
 					<form id="bookSearch">
 						<select id="column" name="column">
 					    	<option value="BOOK_TITLE">제목</option>

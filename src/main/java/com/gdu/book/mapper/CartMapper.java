@@ -12,4 +12,6 @@ public interface CartMapper {
 	public int insertCart(CartDTO cartDTO);
 	public List<CartDTO> selectCartList(int userNo);
 	public int deleteCart(List<String> cartNoList);
+	public CartDTO selectCartByNo(int cartNo);
+	public void updateCount(CartDTO cartDTO);
 }
