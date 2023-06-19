@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.gdu.book.domain.AnnouncementDTO;
 import com.gdu.book.domain.BookDTO;
+import com.gdu.book.domain.DeclarationDTO;
 import com.gdu.book.domain.QnaDTO;
 import com.gdu.book.domain.SummernoteImageDTO;
 
@@ -16,15 +17,11 @@ public interface ManagerMapper {
 	// 책 등록
 	public int addBook(BookDTO bookDTO);
 	
-	// Qna 등록
+	// Qna
 	public int addQna(QnaDTO qnaDTO);
 	public int addQnaGroupNo(QnaDTO qnaDTO);
-	
-	// Qna 리스트
 	public int getQnaCount();
 	public List<QnaDTO> selectQnaList(Map<String, Object> map);
-	
-	// Qna 답변
 	public int answerQna(QnaDTO qnaDTO);
 	public int deleteQna(int qnaNo);
 	
@@ -38,4 +35,6 @@ public interface ManagerMapper {
 	public int updateAnmt(AnnouncementDTO anoDTO);
 	public int updateSummernoteImage(SummernoteImageDTO summernoteImageDTO);
 	
+	// 신고
+	public int addDec(DeclarationDTO decDTO);
 }

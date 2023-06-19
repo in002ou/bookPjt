@@ -14,6 +14,17 @@
 		text-align: left;
 	}
 	
+	strong {
+		font-size: 30px;
+	}
+	
+	.registration{
+		text-align: right;
+	}
+	
+	.board {
+		border: solid 1px black;
+	}
 	
 </style>
 <script th:inline="javascript">
@@ -25,7 +36,7 @@
 	<div th:replace="~{layout/header::gnb}"></div>
 	
 	<div class="wrap" id="detail_screen">
-		<h1>공지사항</h1>
+		<a th:href="@{/manager/anmt.do}"><strong>공지사항</strong></a>
 		<div class="anmt">
 			<div th:text="${anmDTO.title}"></div>
 			<div th:text="${anmDTO.registration}"></div>
@@ -34,6 +45,22 @@
 			<div th:utext="${anmDTO.anmContent}"></div>
 			<input type="button" value="뒤로가기" onclick="fnBack()">
 			<input type="button" value="편집하기" onclick="fnEdit()">
+		</div>
+		<br>
+		<hr>
+		<br>
+		
+		<div class="anmt">
+			<h3>공지 목록</h3>
+			<th:block th:each="anm,vs:${anmtList}">
+				<div class="board">
+					<div>
+						<span>공지</span>
+						<a th:href="@{/manager/anmtDetail.do(anmNo=${anm.anmNo})}" th:text="${anm.title}"></a>
+					</div>
+					<div class="registration" th:text="${anm.registration}"></div>
+				</div>
+			</th:block>
 		</div>
 	</div>
 	

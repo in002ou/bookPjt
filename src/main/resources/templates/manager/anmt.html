@@ -14,6 +14,20 @@
 		text-align: right;
 	}
 	
+	.chk_left{
+		position: relative;
+		right: 0px;
+	}
+	
+	.remove_right{
+		position: relative;
+		left: 895px;
+	}
+	
+	.gubun {
+		display: flex;
+	}
+	
 	
 </style>
 <script th:inline="javascript">
@@ -26,10 +40,17 @@
 	
 	<div class="wrap">
 		<h1>공지사항</h1>
-		<input type="checkbox" id="chk_all">
+		
 		<a th:href="@{/manager/writeAnmt.html}">공지사항 등록하기</a>
 		<form th:action="@{/manager/removeAnmt.do}" method="post" id="frm_remove">
-			<input type="submit" value="삭제하기">
+			<div class="gubun">
+				<div class="chk_left">
+					<input type="checkbox" id="chk_all">
+				</div>
+				<div class="remove_right">
+					<input type="submit" value="삭제하기">
+				</div>
+			</div>
 			<th:block th:each="anm,vs:${anmtList}">
 				<div class="anmt">
 					<hr>
@@ -38,7 +59,7 @@
 						<span th:text="|${beginNo - vs.index}. |"></span>
 						<a th:href="@{/manager/anmtDetail.do(anmNo=${anm.anmNo})}" th:text="${anm.title}"></a>
 					</div>
-					<div class="registration"><span th:text="${anm.registration}"></span></div>
+					<div class="registration" th:text="${anm.registration}"></div>
 					<!--  조회수
 					<c:if test="${sessionScope.loginId eq blog.userDTO.id}">
 	                	<a href="${contextPath}/blog/detail.do?blogNo=${blog.blogNo}">${blog.title}</a>
