@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class MeetingMemberDTO {
 	private int meetingMemberNo;
 	private UserDTO userDTO;
-	private MeetingDTO meetingDTO;
+	private int meetingNo;
 	private int meetingMemberStatus;
 }

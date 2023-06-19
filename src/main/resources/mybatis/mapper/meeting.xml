@@ -29,6 +29,43 @@
 			<result column="USER_GRADE" property="userGrade"/>
 		</association>
 	</resultMap>
+	
+	<resultMap type="OpenTalkBoardDetailDTO" id="OpenTalkBoardDetailMap">
+		<id column="OPEN_TALK_BOARD_DETAIL_NO" property="openTalkBoardDetailNo"/>
+		<result column="BOARD_DETAIL_CONTENT" property="boardDetailContent"/>
+		<result column="BOARD_DETAIL_CONTENT_AT" property="boardDetailContentAt"/>
+		<result column="MEETING_NO" property="meetingNo"/>
+		<association javaType="UserDTO" property="userDTO">
+			<id column="USER_NO" property="userNo"/>
+			<result column="USER_ID" property="userId"/>
+			<result column="USER_NAME" property="userName"/>
+			<result column="USER_GENDER" property="userGender"/>
+			<result column="USER_EMAIL" property="userEmail"/>
+			<result column="USER_BIRTHYEAR" property="userBirthyear"/>
+			<result column="USER_BIRTHDATE" property="userBirthdate"/>
+			<result column="USER_PROFILE" property="userProfile"/>
+			<result column="USER_INTRODUCE" property="userIntroduce"/>
+			<result column="USER_GRADE" property="userGrade"/>
+		</association>
+	</resultMap>
+
+	<resultMap type="MeetingMemberDTO" id="MeetingMemberMap">
+		<id column="MEETING_MEMBER_NO" property="meetingMemberNo"/>
+		<result column="MEETING_NO" property="meetingNo"/>
+		<result column="MEETING_MEMBER_STATUS" property="meetingMemberStatus"/>
+		<association javaType="UserDTO" property="userDTO">
+			<id column="USER_NO" property="userNo"/>
+			<result column="USER_ID" property="userId"/>
+			<result column="USER_NAME" property="userName"/>
+			<result column="USER_GENDER" property="userGender"/>
+			<result column="USER_EMAIL" property="userEmail"/>
+			<result column="USER_BIRTHYEAR" property="userBirthyear"/>
+			<result column="USER_BIRTHDATE" property="userBirthdate"/>
+			<result column="USER_PROFILE" property="userProfile"/>
+			<result column="USER_INTRODUCE" property="userIntroduce"/>
+			<result column="USER_GRADE" property="userGrade"/>
+		</association>
+	</resultMap>
 
 	<insert id="createMeeting" useGeneratedKeys="true" keyProperty="meetingNo" parameterType="MeetingDTO">
 		INSERT INTO MEETING_T(
@@ -112,7 +149,68 @@
 		    U.USER_GRADE
 		  FROM MEETING_T AS M INNER JOIN USER_T AS U 
 		    ON M.USER_NO = U.USER_NO) AS A
-		 WHERE A.MEETING_NO = #{meetingNo} AND A.USER_NO = #{userNo}
+		 WHERE A.MEETING_NO = #{meetingNo}
 	</select>
 
+	<insert id="createApply" useGeneratedKeys="true" keyProperty="meetingMemberNo" parameterType="Map">
+		INSERT INTO MEETING_MEMBER_T (
+			USER_NO
+		  , MEETING_NO
+		  , MEETING_MEMBER_STATUS
+		) VALUES (
+			#{userNo},
+			#{meetingNo},
+			1
+		)
+	</insert>
+
+	<insert id="apply" useGeneratedKeys="true" keyProperty="meetingMemberNo" parameterType="Map">
+		INSERT INTO MEETING_MEMBER_T (
+			USER_NO
+		  , MEETING_NO
+		  , MEETING_MEMBER_STATUS
+		) VALUES (
+			#{userNo},
+			#{meetingNo},
+			0
+		)
+	</insert>
+
+	<select id="getMemberCount" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+		  FROM MEETING_MEMBER_T
+		 WHERE MEETING_NO = #{meetingNo}
+		   AND MEETING_MEMBER_STATUS = 1
+	</select>
+
+	<select id="commentList" parameterType="int" resultMap="OpenTalkBoardDetailMap">
+		SELECT OTBD.OPEN_TALK_BOARD_DETAIL_NO, OTBD.BOARD_DETAIL_CONTENT, OTBD.BOARD_DETAIL_CONTENT_AT, OTBD.MEETING_NO, U.USER_NO, U.USER_ID, U.USER_NAME, U.USER_GENDER, U.USER_EMAIL, U.USER_BIRTHYEAR, U.USER_BIRTHDATE, U.USER_PROFILE, U.USER_INTRODUCE, U.USER_GRADE
+		  FROM OPEN_TALK_BOARD_DETAIL_T AS OTBD
+		 INNER JOIN USER_T AS U
+		    ON OTBD.USER_NO = U.USER_NO
+		 WHERE OTBD.MEETING_NO = #{meetingNo}
+	</select>
+
+	<insert id="commentWrite" useGeneratedKeys="true" keyProperty="openTalkBoardDetailNo" parameterType="openTalkBoardDetailDTO">
+		INSERT INTO OPEN_TALK_BOARD_DETAIL_T (
+			USER_NO,
+			MEETING_NO,
+			BOARD_DETAIL_CONTENT,
+			BOARD_DETAIL_CONTENT_AT
+		) VALUES (
+			#{userDTO.userNo},
+			#{meetingNo},
+			#{boardDetailContent},
+			NOW()
+		)
+	</insert>
+	
+	<select id="participantList" parameterType="int" resultMap="MeetingMemberMap">
+		SELECT MM.MEETING_MEMBER_NO, MM.MEETING_NO, MM.MEETING_MEMBER_STATUS, U.USER_NO, U.USER_ID, U.USER_NAME, U.USER_GENDER, U.USER_EMAIL, U.USER_BIRTHYEAR, U.USER_BIRTHDATE, U.USER_PROFILE, U.USER_INTRODUCE, U.USER_GRADE
+		  FROM MEETING_MEMBER_T AS MM
+		  JOIN USER_T AS U
+		    ON MM.USER_NO = U.USER_NO
+		 WHERE MM.MEETING_NO = #{meetingNo}
+	</select>
+	
 </mapper>

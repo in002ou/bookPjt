@@ -58,4 +58,28 @@ public class MeetingController {
 		return "meeting/detail";
 	}
 	
+	@PostMapping(value="/apply.do", produces="application/json")
+	@ResponseBody
+	public Map<String, Object> apply(HttpServletRequest request) {
+		return meetingService.apply(request);
+	}
+	
+	@PostMapping(value="/comment.view", produces="application/json")
+	@ResponseBody
+	public Map<String, Object> comment(HttpServletRequest request){
+		return meetingService.comment(request);
+	}
+	
+	@PostMapping(value="/participant.view", produces="application/json")
+	@ResponseBody
+	public Map<String, Object> participant(HttpServletRequest request){
+		return meetingService.participant(request);
+	}
+	
+	@PostMapping(value="/comment.do", produces="application/json")
+	@ResponseBody
+	public Map<String, Object> commentWrite(HttpServletRequest request){
+		return meetingService.commentWrite(request);
+	}
+	
 }
