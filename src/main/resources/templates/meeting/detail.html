@@ -1,62 +1,190 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/header::head('친목')}"></head>
+<head th:replace="~{layout/verticalGnb::head('모임활동')}"></head>
 <script>
 
 </script>
 <style>
-    /* 페이지 전체를 감싸는 컨테이너 */
     .container {
         display: flex;
         flex-wrap: wrap;
         height: 100vh;
     }
 
-    /* 왼쪽 상단 영역 */
     .top-left {
         width: 50%;
         height: 50%;
         background-color: #f0f0f0;
     }
 
-    /* 오른쪽 상단 영역 */
     .top-right {
         width: 50%;
         height: 50%;
         background-color: #e0e0e0;
     }
 
-    /* 왼쪽 하단 영역 */
     .bottom-left {
         width: 50%;
         height: 50%;
         background-color: #d0d0d0;
     }
 
-    /* 오른쪽 하단 영역 */
     .bottom-right {
         width: 50%;
         height: 50%;
         background-color: #c0c0c0;
     }
+img {
+	width: 300px;
+}
+.postAndParticipantGnb {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid gray;
+}
 
+.postAndParticipantGnb li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.postAndParticipantGnb li a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.postAndParticipantGnb li a:hover {
+  background-color: #ddd;
+}
 </style>
 </head>
 <body>
 
-	<div th:replace="~{layout/header::gnb}"></div>
+	<div class="gnb">
+		<div th:replace="~{layout/verticalGnb::gnb}"></div>
+	</div>
 
     <div class="container">
     
         <div class="top-left">
+        	<img alt="대표이미지" th:src="@{${meeting.image}}">
+        	<span th:text="${meeting.meetingName}"></span>
+        	<strong>모집 인원 </strong><span th:text="${count}+'/'+${meeting.capacity}"></span>	<!-- 현재 인원 추가 예정 -->
+        	<strong>모집기간 </strong><span th:text="${meeting.meetingStartAt}+'-'+${meeting.meetingEndAt}"></span>
+			<input type="button" value="신청하기" id="btnApply" th:data-userno="${meeting.userDTO.userNo}" th:data-meetingno="${meeting.meetingNo}">
+			<script>
+				$('#btnApply').on('click', function(){
+				    var userNo = $(this).data('userno');
+				    var meetingNo = $(this).data('meetingno');
+				    console.log(userNo);
+				    $.ajax({
+				    	type: 'post',
+				    	url: '/meeting/apply.do',
+				    	data: {
+				    		userNo: userNo,
+				    		meetingNo: meetingNo
+				    	},
+				    	dataType: 'json',
+				    	success: function(resData){
+				    		if(resData.result == 1){
+				    			alert('신청 완료');
+				    		}
+				    	}
+				    })
+				})
+			</script>
+        </div>
+        
+        <div class="top-right">
         	
         </div>
         
-        <div class="top-right"></div>
+        <div class="bottom-left">
+			<ul class="postAndParticipantGnb">
+			  <li><a href="#" onclick="fnWrite()" th:data-userno="${meeting.userDTO.userNo}" th:data-meetingno="${meeting.meetingNo}">글 쓰기</a></li>
+			  <li><a href="#" onclick="fnViewParticipant()" th:data-userno="${meeting.userDTO.userNo}" th:data-meetingno="${meeting.meetingNo}">참여 인원</a></li>
+			</ul>
+			<div class="container_wrap">
+				<div class="comment_wrap">
+					<div></div>
+					<input type="text" name="content" class="commentContent" id="commentContent">
+					<input type="hidden" name="userNo" id="userNo" th:value="${meeting.userDTO.userNo}">
+					<input type="hidden" name="meetingNo" id="meetingNo" th:value="${meeting.meetingNo}">
+					<input type="button" id="commentWrtie" value="입력">
+				</div>
+				<div class="participant_wrap"></div>
+			</div>
+			<script>
+				var userNo = $('#userNo').val();
+				var meetingNo = $('#meetingNo').val();
+				function fnWrite(){
+					$('.participant_wrap').hide();
+					$('.comment_wrap').show();
+					$.ajax({
+						type: 'post',
+						url: '/meeting/comment.view',
+						data: 'meetingNo=' + meetingNo,
+						dataType: 'json',
+						success: function(resData){
+							var str = '<div class="commentList">';
+							$.each(resData.commentList, function(i, comment){
+								str += '<div class="comment">' + comment.userDTO.userName + '&nbsp;' + comment.boardDetailContent + '</div>';
+							})
+							$('.comment_wrap').children('div').html('');
+							$('.comment_wrap').children('div').append(str);
+						}
+						
+					})
+				}
+				function fnViewParticipant(){
+					$('.comment_wrap').hide();
+					$('.participant_wrap').show();
+					$.ajax({
+						type: 'post',
+						url: '/meeting/participant.view',
+						data: 'meetingNo=' + meetingNo,
+						dataType: 'json',
+						success: function(resData){
+							var str = '<div class="participantList">';
+							$.each(resData.participantList, function(i, participant){
+								str += '<div class="participant">' + participant.userDTO.userName + '</div>';
+							})
+							$('.participant_wrap').html('');
+							$('.participant_wrap').append(str);
+						}
+					})
+					
+				}
+				$('#commentWrtie').on('click', function(ev){
+					var commentValue = $('.commentContent').val().trim();
+					if(commentValue == '') {
+						ev.preventDefault();
+						return;
+					}
+					$.ajax({
+						type: 'post',
+						url: '/meeting/comment.do',
+						data: 'userNo=' + userNo + '&meetingNo=' + meetingNo + '&commentContent=' + $('#commentContent').val(),
+						dataType: 'json',
+						success: function(resData){
+							fnWrite();
+							$('#commentContent').val('');
+						}
+					})
+				})
+				$(function(){
+					fnWrite();
+				})
+			</script>
+        </div>
         
-        <div class="bottom-left"></div>
-        
-        <div class="bottom-right"></div>
+        <div class="bottom-right">
+        	
+        </div>
         
     </div>
 

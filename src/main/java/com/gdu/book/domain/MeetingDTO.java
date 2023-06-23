@@ -19,4 +19,5 @@ public class MeetingDTO {
 	private Date meetingStartAt;
 	private Date meetingEndAt;
 	private String category;
+	private String meetingContent;
 }

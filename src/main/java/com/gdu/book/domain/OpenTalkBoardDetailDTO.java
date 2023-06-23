@@ -1,5 +1,7 @@
 package com.gdu.book.domain;
 
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OpenTalkBoardDetailDTO {
 	private int openTalkBoardDetailNo;
-	private OpenTalkBoardDTO openTalkBoardDTO;
+	private int meetingNo;
 	private UserDTO userDTO;
 	private String boardDetailContent;
+	private Date boardDetailContentAt;
 }
