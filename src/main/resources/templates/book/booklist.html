@@ -143,7 +143,7 @@
 					</div>
 					<div class="btnCart">
 							<form method="post" th:action="@{/cart/addCart.do}">
-								<input type="hidden" value="1" name="userNo">
+								<input type="hidden" th:value="${session.userNo}" name="userNo">
 								<input type="hidden" value="1" name="count">
 								<input type="hidden" th:value="${bookList.bookNo}" name="bookNo">
 								<p th:text="|${bookList.bookPrice} 원|"></p>

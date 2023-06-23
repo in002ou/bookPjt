@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.ui.Model;
 
-import com.gdu.book.domain.CartDTO;
 
 
 public interface CartService {
@@ -17,4 +16,5 @@ public interface CartService {
 	public void removeCart(HttpServletRequest request, HttpServletResponse response);
 	public void getcartDetail(HttpServletRequest request, Model model);
 	public Map<String, Object> cartUp(HttpServletRequest request);
+	public Map<String, Object> cartDown(HttpServletRequest request);
 }

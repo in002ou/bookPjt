@@ -8,9 +8,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.gdu.book.domain.BookDTO;
@@ -91,7 +91,9 @@ public class CartServiceImpl implements CartService {
 	
 	@Override
 	public void getcartDetail(HttpServletRequest request, Model model) {
-		int userNo = 1;	// sessionScope 이용해야함
+		HttpSession session = request.getSession();
+		
+		int userNo = (int)session.getAttribute("userNo");	// sessionScope 이용해야함
 		
 		List<CartDTO> cartList = cartMapper.selectCartList(userNo);
 		int totalPrice = 0;
@@ -107,7 +109,6 @@ public class CartServiceImpl implements CartService {
 		
 	}
 	
-	@Transactional
 	@Override
 	public Map<String, Object> cartUp(HttpServletRequest request) {
 		
@@ -122,8 +123,51 @@ public class CartServiceImpl implements CartService {
 		cartMapper.updateCount(cartDTO);
 		
 		CartDTO cartUpdateList = cartMapper.selectCartByNo(cartNo);
+		
+		HttpSession session = request.getSession();
+		int userNo = (int)session.getAttribute("userNo");
+		List<CartDTO> cartListAll = cartMapper.selectCartList(userNo);
+		int totalPrice = 0;
+		for(int i = 0; i < cartListAll.size(); i++) {
+			for(int x = 0; x < cartListAll.get(i).getCount(); x++) {
+				totalPrice += cartListAll.get(i).getBookDTO().getBookPrice();
+			}
+		}
+		
 		Map<String, Object> map = new HashMap<>();
 		map.put("cartUpdate", cartUpdateList);
+		map.put("totalPrice", totalPrice);
+		
+		return map;
+	}
+	@Override
+	public Map<String, Object> cartDown(HttpServletRequest request) {
+		
+		int cartNo = Integer.parseInt(request.getParameter("cartNo"));
+		CartDTO cartList = cartMapper.selectCartByNo(cartNo);
+		int count =  cartList.getCount();
+		count--;
+		
+		CartDTO cartDTO = new CartDTO();
+		cartDTO.setCount(count);
+		cartDTO.setCartNo(cartNo);
+		cartMapper.updateCount(cartDTO);
+		
+		CartDTO cartUpdateList = cartMapper.selectCartByNo(cartNo);
+		
+		HttpSession session = request.getSession();
+		int userNo = (int)session.getAttribute("userNo");
+		List<CartDTO> cartListAll = cartMapper.selectCartList(userNo);
+		int totalPrice = 0;
+		for(int i = 0; i < cartListAll.size(); i++) {
+			for(int x = 0; x < cartListAll.get(i).getCount(); x++) {
+				totalPrice += cartListAll.get(i).getBookDTO().getBookPrice();
+			}
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("cartUpdate", cartUpdateList);
+		map.put("totalPrice", totalPrice);
 		
 		return map;
 	}

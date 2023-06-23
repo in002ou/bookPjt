@@ -21,14 +21,14 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
     HttpSession session = request.getSession();
     
     // 로그인 여부 확인
-    if(session != null && session.getAttribute("userId") == null) {
+    if(session != null && session.getAttribute("userNo") == null) {
       
       // 응답
       response.setContentType("text/html; charset=UTF-8");
       PrintWriter out = response.getWriter();
       out.println("<script>");
       out.println("if(confirm('로그인이 필요한 기능입니다. 로그인하시겠습니까?')){");
-      out.println("location.href='" + request.getContextPath() + "/user/login.form';");
+      out.println("location.href='" + request.getContextPath() + "/user/login.html';");
       out.println("} else {");
       out.println("history.back();");
       out.println("}");

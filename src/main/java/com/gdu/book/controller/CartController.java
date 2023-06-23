@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.gdu.book.domain.CartDTO;
 import com.gdu.book.service.CartService;
 
 import lombok.RequiredArgsConstructor;
@@ -57,6 +56,12 @@ public class CartController {
 	public Map<String, Object> cartUp(HttpServletRequest request) {
 		
 		return cartService.cartUp(request);
+	}
+	@ResponseBody
+	@PostMapping(value="/countDown.do", produces="application/json")
+	public Map<String, Object> cartDown(HttpServletRequest request) {
+		
+		return cartService.cartDown(request);
 	}
   
 

@@ -207,7 +207,7 @@
 		                        	<div id="newCount">
 		                        	</div>
 		                        	<div>
-		                        		<a href="#" onclick="fnDisAddcount()" th:data-cartno="${cartlist.cartNo}">-</a>
+		                        		<a href="#" onclick="fnDisAddcount(this)" th:data-cartno="${cartlist.cartNo}">-</a>
 		                        		<a href="#" onclick="fnAddcount(this)" th:data-cartno="${cartlist.cartNo}">+</a>
 		                        	</div>
 		                        </td>
@@ -217,7 +217,7 @@
 			        </th:block>
 	                <tfoot>
 	                	<tr>
-	                		<td colspan="6" class="totalPrice" th:text="|주문금액&nbsp;&nbsp;&nbsp;${totalPrice}원|"></td>
+	                		<td colspan="6" id="totalPrice" class="totalPrice" th:text="|주문금액&nbsp;&nbsp;&nbsp;${totalPrice}원|"></td>
 	                	</tr>
 	                </tfoot>
 	        </table>
@@ -314,10 +314,38 @@
 			data: 'cartNo=' + cartNo,
 			dataType: 'json',
 			success: function(resData){
-				$('.newCount').empty();
-				$('.count').hide();
-				let str = '<strong class="count">'+ resData.cartUpdate.count +'</strong>';
-				$('.newCount').append(str);
+				$('.count').empty();
+				$('.totalPrice').empty();
+				if(resData != ''){
+					let str = '<strong class="count">'+ resData.cartUpdate.count +'</strong>';
+					let str2 = '<td colspan="6" id="totalPrice" class="totalPrice">주문금액&nbsp;&nbsp;&nbsp;' +  resData.totalPrice + '원</td>';
+					$('.count').append(str);
+					$('.totalPrice').append(str2);
+				}else if(resData == null){
+					return;
+				}
+			}
+		})
+	}
+	function fnDisAddcount(element){
+ 		var cartNo = $(element).data('cartno');
+		console.log(cartNo);
+		$.ajax({
+			type: 'post',
+			url: '/cart/countDown.do',
+			data: 'cartNo=' + cartNo,
+			dataType: 'json',
+			success: function(resData){
+				$('.count').empty();
+				$('.totalPrice').empty();
+				if(resData != ''){
+					let str = '<strong class="count">'+ resData.cartUpdate.count +'</strong>';
+					let str2 = '<td colspan="6" id="totalPrice" class="totalPrice">주문금액&nbsp;&nbsp;&nbsp;' +  resData.totalPrice + '원</td>';
+					$('.count').append(str);
+					$('.totalPrice').append(str2);
+				}else if(resData == null){
+					return;
+				}
 			}
 		})
 	}
