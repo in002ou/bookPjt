@@ -16,10 +16,20 @@ public class MeetingFileUtil {
   
   // String path 만들기
   public String getPath() {
-    LocalDate now = LocalDate.now();
-    // 루트/storage/2023/05/08
-    return "/storage" + sep + now.getYear() + sep + String.format("%02d", now.getMonthValue()) + sep + String.format("%02d", now.getDayOfMonth());
-  }
+	    LocalDate now = LocalDate.now();
+	    String os = System.getProperty("os.name").toLowerCase();
+
+	    if (os.contains("win")) {
+	        // Windows 운영 체제인 경우
+	        return "C:" + sep + "storage" + sep + now.getYear() + sep + String.format("%02d", now.getMonthValue()) + sep + String.format("%02d", now.getDayOfMonth());
+	    } else if (os.contains("mac") || os.contains("nix") || os.contains("nux") || os.contains("bsd")) {
+	        // macOS, Linux, Unix, BSD 운영 체제인 경우
+	        return "/Users/choein-yeong/Documents/storage" + sep + now.getYear() + sep + String.format("%02d", now.getMonthValue()) + sep + String.format("%02d", now.getDayOfMonth());
+	    } else {
+	        // 기타 운영 체제인 경우
+	        throw new UnsupportedOperationException("Unsupported operating system");
+	    }
+	}
   
   // String filesystemName 만들기
   public String getFilesystemName(String originName) {
