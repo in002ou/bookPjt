@@ -135,5 +135,16 @@
 			   , #{receivedUserNo}
 				)
 	</insert>
+	
+	<select id="selectQnaAnswerList" resultMap="QnaMap" parameterType="Map">
+		SELECT A.QNA_NO, A.USER_ID, A.USER_NAME,  A.TITLE, A.ANSWER, A.QNA_STATE, A.ANSWER_AT, A.DEPTH, A.GROUP_NO
+      	  FROM (SELECT Q.QNA_NO, U.USER_ID, U.USER_NAME, Q.TITLE, Q.ANSWER, Q.QNA_STATE, Q.ANSWER_AT, Q.DEPTH, Q.GROUP_NO
+                  FROM QNA_T Q INNER JOIN USER_T U
+                    ON Q.USER_NO = U.USER_NO) A
+         WHERE QNA_STATE = #{state}
+     	 ORDER BY GROUP_NO DESC
+     	 LIMIT #{begin}, #{recordPerPage}
+	</select>  
+	
  	 
 </mapper>

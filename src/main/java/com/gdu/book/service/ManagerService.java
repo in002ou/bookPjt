@@ -25,6 +25,7 @@ public interface ManagerService {
 	public void QnaList(HttpServletRequest request, Model model);
 	public int answerQna(HttpServletRequest request);
 	public int deleteQna(HttpServletRequest request);
+	public Map<String, Object> answerAdd(HttpServletRequest request);
 	
 	// 공지사항
 	public void addAnmt(HttpServletRequest request, HttpServletResponse response);

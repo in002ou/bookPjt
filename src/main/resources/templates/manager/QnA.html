@@ -28,7 +28,7 @@
 <script th:inline="javascript">
 
 	$(function(){
-		
+		console.log()
 	  	// 원글 달기 결과 메시지
 	    let addResult = /*[[${addResult}]]*/ null;  // addResult가 전달되지 않는 경우 null을 사용한다.
 	    if(addResult !== null){
@@ -107,71 +107,133 @@
 	<div th:replace="~{layout/header::gnb}"></div>
 	
 	<div class="wrap">
-		<th:block th:if="${session.userId != 'admin'}">
-			<a th:href="@{/manager/writeQna.html}" id="QnaList">작성하기</a> 
+		<th:block th:if="${session.loginId != 'admin'}">
+			<a th:href="@{/manager/writeQna.html}" id="QnaList">작성하기</a>
 		</th:block>
 		<h1>1:1 문의</h1>
 		<div th:utext="${pagination}" class="pagination"></div>
-		<th:block th:each="qna,vs:${qnaList}">
-			<hr>
-			<div class="qna list">
-				<div>
-					<span th:text="|${qna.userDTO.userId}님: &nbsp;|"></span>
-					<span th:text="${qna.title}"></span>
-					<br>
-					<br>
-					<div>
-						<th:block th:if="${qna.qnaState == 1}"><span>!!!</span> </th:block>
-						<br>
-						<th:block th:if="${session.userId != 'admin'}">
-							<span><input type="button" value="답변 보기" class="btn_reply"> </span>
-							<form class="frm_remove" method="post" th:action="@{/manager/remove.do}">
-								<input type="hidden" name="qnaNo" th:value="${qna.qnaNo}">
-								<button class="btn_remove">삭제</button>
-							</form>
-						</th:block>
-						<th:block th:if="${session.userId == 'admin'}">
-							<th:block th:if="${qna.qnaState == 2}">
-								<span><input type="button" value="답변 수정하기" class="btn_answer"> </span>
-							</th:block>
-							<th:block th:if="${qna.qnaState == 1}">
-								<span><input type="button" value="답변 달기" class="btn_answer"> </span>
-							</th:block>
-						</th:block>
-						<th:block th:if="${session.loginId != admin}"> 
-							
-						 </th:block> 
+		<th:block th:if="${session.loginId == 'admin'}">
+			<input type="button" value="답변한 글 목록" onclick="fnAnswerAdd">
+			<input type="button" value="답변하지 않은 글 목록" onclick="fnAnswerEdit">
+		</th:block>
+		<th:block th:if="${qnaList == null}">
+			<div>문의한 내역이 없습니다.</div>		
+		</th:block>
+		<th:block th:if="${qnaList != null}">
+			<th:block th:each="qna,vs:${qnaList}">
+				<hr>
+				<th:block th:if="${session.loginId == qna.userDTO.userId}">
+					<div class="qna list">
+						<div>
+							<span th:text="|${qna.userDTO.userId}님: &nbsp;|"></span>
+							<span th:text="${qna.title}"></span>
+							<br>
+							<br>
+							<div>
+								
+								<th:block th:if="${qna.qnaState == 1}"><span>!!!</span> </th:block>
+								<br>
+								<th:block th:if="${session.loginId != 'admin'}">
+									<span><input type="button" value="답변 보기" class="btn_reply"> </span>
+									<form class="frm_remove" method="post" th:action="@{/manager/remove.do}">
+										<input type="hidden" name="qnaNo" th:value="${qna.qnaNo}">
+										<button class="btn_remove">삭제</button>
+									</form>
+								</th:block>
+								<th:block th:if="${session.loginId == 'admin'}">
+									<th:block th:if="${qna.qnaState == 2}">
+										<span><input type="button" value="답변 수정하기" class="btn_answer"> </span>
+									</th:block>
+									<th:block th:if="${qna.qnaState == 1}">
+										<span><input type="button" value="답변 달기" class="btn_answer"> </span>
+									</th:block>
+								</th:block>
+								<th:block th:if="${session.loginId != admin}"> 
+									
+								 </th:block> 
+							</div>
+						</div>
 					</div>
+				</th:block>
+				<th:block th:if="${session.loginId == 'admin'}">
+					<div class="qna list">
+						<div>
+							<span th:text="|${qna.userDTO.userId}님: &nbsp;|"></span>
+							<span th:text="${qna.title}"></span>
+							<br>
+							<br>
+							<div>
+								<th:block th:if="${qna.qnaState == 1}"><span>!!!</span> </th:block>
+								<br>
+								<th:block th:if="${session.loginId != 'admin'}">
+									<span><input type="button" value="답변 보기" class="btn_reply"> </span>
+									<form class="frm_remove" method="post" th:action="@{/manager/remove.do}">
+										<input type="hidden" name="qnaNo" th:value="${qna.qnaNo}">
+										<button class="btn_remove">삭제</button>
+									</form>
+								</th:block>
+								<th:block th:if="${session.loginId == 'admin'}" class="answerAdd">
+									<th:block th:if="${qna.qnaState == 2}">
+										<span><input type="button" value="답변 수정하기" class="btn_answer"> </span>
+									</th:block>
+									<th:block th:if="${qna.qnaState == 1}" class="answerEdit">
+										<span><input type="button" value="답변 달기" class="btn_answer"> </span>
+									</th:block>
+								</th:block>
+								<th:block th:if="${session.loginId != admin}"> 
+									
+								 </th:block> 
+							</div>
+						</div>
+					</div>
+				</th:block>
+				<div class="write blind">
+					<form method="post" th:action="@{/manager/answer.do}">
+						<div>
+							<label for="answer">답변</label>
+							<br>
+							<textarea rows="10" cols="50" id="answer" name="answer" placeholder="답변 내용을 입력해주세요" required="required" th:text="${qna.answer}"></textarea>
+							<input type="hidden" name="qnaNo" th:value="${qna.qnaNo}">
+							<input type="hidden" name="depth" th:value="${qna.depth + 1}">
+							<input type="hidden" name="groupNo" th:value="${qna.groupNo}">
+							<button>답변달기</button>
+						</div>
+					</form>
 				</div>
-			</div>
-			<div class="write blind">
-				<form method="post" th:action="@{/manager/answer.do}">
-					<div>
-						<label for="answer">답변</label>
+				<div class="answer blind">
+					<th:block th:if="${qna.qnaState == 2}">
+						<span>관리자 : </span>
+						<span th:text="${qna.answer}"></span>
 						<br>
-						<textarea rows="10" cols="50" id="answer" name="answer" placeholder="답변 내용을 입력해주세요" required="required" th:text="${qna.answer}"></textarea>
-						<input type="hidden" name="qnaNo" th:value="${qna.qnaNo}">
-						<input type="hidden" name="depth" th:value="${qna.depth + 1}">
-						<input type="hidden" name="groupNo" th:value="${qna.groupNo}">
-						<button>답변달기</button>
-					</div>
-				</form>
-			</div>
-			<div class="answer blind">
-				<th:block th:if="${qna.qnaState == 2}">
-					<span>관리자 : </span>
-					<span th:text="${qna.answer}"></span>
-					<br>
-					<span th:text="${qna.answerAt}"></span>
-				</th:block>
-				<th:block th:if="${qna.qnaState == 1}">
-					<span>아직 답변이 달리지 않았습니다.</span>
-				</th:block>
-			</div>
+						<span th:text="${qna.answerAt}"></span>
+					</th:block>
+					<th:block th:if="${qna.qnaState == 1}">
+						<span>아직 답변이 달리지 않았습니다.</span>
+					</th:block>
+				</div>
+			</th:block>
 		</th:block>
 		<hr>
 	</div>
 
+<script>
+
+	function fnAnswerAdd(){
+		
+		$.ajax({
+			type: 'get',
+			url: '/manager/answerAdd.do',
+			dataType: 'json',
+			success: function(resData){
+				$('#wrap').empty();
+				
+			}
+			
+		})
+		
+	}
+	
+</script>
   	
   	
 

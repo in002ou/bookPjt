@@ -137,4 +137,10 @@ public class ManagerController {
 		return null;
 	}
 	
+	@GetMapping("/answerAdd.do")
+	public Map<String, Object> addQna(HttpServletRequest request){
+		managerService.answerAdd(request);
+		return managerService.answerAdd(request);
+	}
+	
 }

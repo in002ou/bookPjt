@@ -268,8 +268,6 @@ public class ManagerServiceImpl implements ManagerService {
 		
 	}
 	
-	
-	
 	@Override
 	public void selectAnmt(HttpServletRequest request, Model model) {
 		
@@ -440,6 +438,31 @@ public class ManagerServiceImpl implements ManagerService {
 		int decGubun = Integer.parseInt(request.getParameter("decGubun"));
 		String decContent = request.getParameter("decContent");
 		
-		
 	}
+	
+	@Override
+	public Map<String, Object> answerAdd(HttpServletRequest request) {
+		
+		Optional<String> opt1 = Optional.ofNullable(request.getParameter("page"));
+		int page = Integer.parseInt(opt1.orElse("1"));
+		
+		int totalRecord = managerMapper.getQnaCount();
+		
+		int recordPerPage = 10;
+		
+		pageUtil.setPageUtil(page, totalRecord, recordPerPage);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("begin", pageUtil.getBegin());
+		map.put("recordPerPage", recordPerPage);
+		map.put("state", 1);
+		
+		List<QnaDTO> qnaList = managerMapper.selectQnaList(map);
+		
+		Map<String, Object> map1 = new HashMap<String, Object>();
+		map1.put("QnaList", qnaList);
+		
+		return map1;
+	}
+	
 }

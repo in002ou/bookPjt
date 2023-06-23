@@ -24,6 +24,7 @@ public interface ManagerMapper {
 	public List<QnaDTO> selectQnaList(Map<String, Object> map);
 	public int answerQna(QnaDTO qnaDTO);
 	public int deleteQna(int qnaNo);
+	public List<QnaDTO> selectQnaAnswerList(Map<String, Object> map);
 	
 	// 공지사항
 	public int addAnmt(AnnouncementDTO anoDTO);
