@@ -39,7 +39,7 @@
 	<select id="selectCartList" parameterType="int" resultMap="CartMap">
 		SELECT C.CART_NO, C.COUNT, B.BOOK_TITLE, B.BOOK_PRICE, B.BOOK_IMAGE 
 		  FROM BOOK_T B INNER JOIN CART_T C 
-		    ON B.BOOK_NO = C.BOOK_NO
+		    ON B.BOOK_NO = C.BOOK_NO 
 		 WHERE USER_NO = #{userNo}
 	</select>
 	
@@ -53,6 +53,16 @@
 		</where>
 	</delete>
 	
+	<select id="selectCartByNo" parameterType="int" resultType="CartDTO">
+	 	SELECT COUNT
+	 	  FROM CART_T
+	 	 WHERE CART_NO = #{cartNo}
+	</select>
 	
+	<update id="updateCount" parameterType="CartDTO" >
+		UPDATE CART_T
+		   SET COUNT = #{count}
+		 WHERE CART_NO = #{cartNo}
+	</update>
 	
 </mapper>

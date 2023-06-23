@@ -78,7 +78,6 @@
 	.bookDetail {
     	width: 50%;
     	height: 80%;
-    	border:1px solid black;
 	    text-align: left;
 	}
 	.bookDetail > .bookDetail1 {
@@ -105,13 +104,23 @@
       	align-items: center;
       	text-align: center;
 	}
+	.likeAndDislike {
+		display: flex;
+		margin-left: 115px;
+		height: 100px;
+	}
+	.like {
+		margin-bottom: 30px;
+	}
+	.dislike {
+		margin-top: 30px;
+	}
 	.reviewBtnandContent {
 		display: flex;
 	}
 	.reviewAll{
 		height: 100px;
 		width: 100%;
-		border-bottom: 1px solid #d5d5d5;
 		padding: 10px;
 	}
 	.reviewHeader {
@@ -120,16 +129,15 @@
 		display: flex;
 		
 	}
-	.reviewHeader > div{
-	}
+	
 	.reviewHeader > strong {
 		font-size: 12px;
 	}
 	
 	.reviewBody{
 		padding-top: 10px;
-		height: 50px;
-		font-size: 24px;
+		height: 40px;
+		font-size: 20px;
 	}
 	
 	.reviewfooter{
@@ -137,7 +145,13 @@
 		text-align: right;
 		font-size: 12px;
 		color: #d5d5d5;
+		border-bottom: 1px solid #d5d5d5;
+		
 	}
+	.reviewfooter > button {
+		height: 100%;
+	}
+	
 	
 </style>
 <body>
@@ -168,12 +182,32 @@
 				</div>
 				<div class="payment">
 					<form method="post" th:action="@{/cart/addCart.do}">
-						<input type="hidden" value="1" name="userNo">
+						<input type="hidden" th:value="${session.userNo}" name="userNo">
 						<input type="hidden" th:value="${bookDetail.bookNo}" name="bookNo">
 						<div>수량 : <input type="number" id="count" min="1" max="10" value="1" name="count">개</div>
 						<button class="w-btn w-btn-indigo">장바구니 담기</button>
 					</form>
 					<button onclick="fnCartList()" class="w-btn w-btn-indigo">장바구니</button>
+					<div class="likeAndDislike">
+						<div class="like">
+							<a th:href="@{/book/bookLike.do(bookNo=${bookDetail.bookNo})}">
+								<img th:src="@{/img/like.png}">
+							</a>
+						</div>
+						<div class="dislike">
+							<a th:href="@{/book/bookDisLike.do(bookNo=${bookDetail.bookNo})}">
+								<img th:src="@{/img/dislike.png}">
+							</a>
+						</div>
+					</div>
+						<th:block th:if="${userLike != 0}">
+							<th:block th:if="${userLike == 1}">
+								<strong>추천한 도서 입니다.</strong>
+							</th:block>
+							<th:block th:if="${userLike == -1}">
+								<strong>비 추천한 도서 입니다.</strong>
+							</th:block>
+						</th:block>
 				</div>
 			</div>	
 			<hr>
@@ -181,7 +215,7 @@
 				<div class="bookReview">
 					<strong>한줄평 등록</strong>
 					<div class="reviewBtnandContent">
-						<input type="hidden" value="1" name="userNo">
+						<input type="hidden" th:value="${session.userNo}" name="userNo">
 						<input type="hidden" th:value="${bookDetail.bookNo}" name="bookNo">
 				    	<textarea id="review" name="review" rows="4" cols="50" placeholder="한줄평을 입력해주세요!"></textarea>
 					    <button class="w-btn w-btn-indigo">등록</button>
@@ -221,7 +255,7 @@
 								<form method="post" th:action="@{/book/deleteReview.do}">
 									<input type="hidden" th:value="${review.bookReviewNo}" name="bookReviewNo">
 									<input type="hidden" th:value="${review.bookNo}" name="bookNo">
-									<button>삭제</button>
+									<input type="submit" value="삭제">
 								</form>
 							</div>
 						</div>
@@ -229,9 +263,11 @@
 						<div class="reviewBody">
 							<strong th:text="${review.bookReview}"></strong>
 						</div>
-						<div class="reviewfooter">
-							<a href="">신고</a>
-						</div>
+							<form th:action="@{/manager/declaration.html}" class="reviewfooter" method="post">
+         						<input type="hidden" th:value="${review.userDTO.userNo}" name="userNo">
+         						<input type="hidden" th:value="${review.bookReviewNo}" name="bookReviewNo">
+         						<input type="submit" value="신고">
+      						</form>
 					</div>
 				</th:block>
 			</div>
@@ -266,7 +302,8 @@
 	})
 	
 	function fnCartList(){
-		location.href = '/cart/cartList.do?userNo=1';
+		let userNo = /*[[${session.userNo}]]*/ null;
+		location.href = '/cart/cartList.do?userNo=' + userNo;
 	}
 	 
 </script>

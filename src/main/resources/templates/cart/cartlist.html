@@ -149,6 +149,7 @@
 	}
 	
 	.cart__bigorderbtn {
+	  cursor: pointer;
 	  width: 200px;
 	  height: 50px;
 	  font-size: 16px;
@@ -200,12 +201,14 @@
 		                            <strong th:text="${cartlist.bookDTO.bookPrice}"></strong>
 		                        </td>
 		                        <td>
-		                        	<div>
+		                        	<div id="count">
 			                        	<strong th:value="${cartlist.count}" class="count" th:text="${cartlist.count}"></strong>
 		                        	</div>
+		                        	<div id="newCount">
+		                        	</div>
 		                        	<div>
-		                        		<a th:href="@{/cart/countDown.do(cartNo=${cartlist.cartNo})}">-</a>
-		                        		<a th:href="@{/cart/countUp.do(cartNo=${cartlist.cartNo})}">+</a>
+		                        		<a href="#" onclick="fnDisAddcount(this)" th:data-cartno="${cartlist.cartNo}">-</a>
+		                        		<a href="#" onclick="fnAddcount(this)" th:data-cartno="${cartlist.cartNo}">+</a>
 		                        	</div>
 		                        </td>
 		                        <td>무료</td>
@@ -214,7 +217,7 @@
 			        </th:block>
 	                <tfoot>
 	                	<tr>
-	                		<td colspan="6" class="totalPrice" th:text="|주문금액&nbsp;&nbsp;&nbsp;${totalPrice}원|"></td>
+	                		<td colspan="6" id="totalPrice" class="totalPrice" th:text="|주문금액&nbsp;&nbsp;&nbsp;${totalPrice}원|"></td>
 	                	</tr>
 	                </tfoot>
 	        </table>
@@ -300,6 +303,51 @@
 	            
 	        }
 	    });
+	    
+	}
+	function fnAddcount(element){
+ 		var cartNo = $(element).data('cartno');
+		console.log(cartNo);
+		$.ajax({
+			type: 'post',
+			url: '/cart/countUp.do',
+			data: 'cartNo=' + cartNo,
+			dataType: 'json',
+			success: function(resData){
+				$('.count').empty();
+				$('.totalPrice').empty();
+				if(resData != ''){
+					let str = '<strong class="count">'+ resData.cartUpdate.count +'</strong>';
+					let str2 = '<td colspan="6" id="totalPrice" class="totalPrice">주문금액&nbsp;&nbsp;&nbsp;' +  resData.totalPrice + '원</td>';
+					$('.count').append(str);
+					$('.totalPrice').append(str2);
+				}else if(resData == null){
+					return;
+				}
+			}
+		})
+	}
+	function fnDisAddcount(element){
+ 		var cartNo = $(element).data('cartno');
+		console.log(cartNo);
+		$.ajax({
+			type: 'post',
+			url: '/cart/countDown.do',
+			data: 'cartNo=' + cartNo,
+			dataType: 'json',
+			success: function(resData){
+				$('.count').empty();
+				$('.totalPrice').empty();
+				if(resData != ''){
+					let str = '<strong class="count">'+ resData.cartUpdate.count +'</strong>';
+					let str2 = '<td colspan="6" id="totalPrice" class="totalPrice">주문금액&nbsp;&nbsp;&nbsp;' +  resData.totalPrice + '원</td>';
+					$('.count').append(str);
+					$('.totalPrice').append(str2);
+				}else if(resData == null){
+					return;
+				}
+			}
+		})
 	}
 	
 </script>

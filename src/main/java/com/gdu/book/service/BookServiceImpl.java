@@ -14,6 +14,7 @@ import com.gdu.book.domain.BookDTO;
 import com.gdu.book.domain.BookReviewDTO;
 import com.gdu.book.domain.BookSearchDTO;
 import com.gdu.book.domain.UserDTO;
+import com.gdu.book.domain.UserRecommenedDTO;
 import com.gdu.book.mapper.BookMapper;
 import com.gdu.book.util.PageUtil;
 
@@ -33,7 +34,7 @@ public class BookServiceImpl implements BookService {
 		
 		int totalRecord = bookMapper.getBookCount();
 		
-		int recordPerPage = 5;
+		int recordPerPage = 10;
 		
 		pageUtil.setPageUtil(page, totalRecord, recordPerPage);
 		
@@ -69,6 +70,17 @@ public class BookServiceImpl implements BookService {
 		String bookNo = request.getParameter("bookNo");
 		BookDTO bookDetail = bookMapper.selectBookDetail(bookNo);
 		List<BookReviewDTO> bookReview = bookMapper.selectBookReview(bookNo);
+		
+		UserRecommenedDTO userRecommenedDTO = new UserRecommenedDTO();
+		BookDTO bookDTO = new BookDTO();
+		bookDTO.setBookNo(bookNo);
+		UserDTO userDTO = new UserDTO();
+		userDTO.setUserNo(1);
+		userRecommenedDTO.setBookDTO(bookDTO);
+		userRecommenedDTO.setUserDTO(userDTO);
+		UserRecommenedDTO userLikeDTO   = bookMapper.selectUserLike(userRecommenedDTO);
+		
+		model.addAttribute("userLike", userLikeDTO == null ? 0 : userLikeDTO.getRecommened());
 		model.addAttribute("bookDetail", bookDetail);
 		model.addAttribute("bookReview", bookReview);
 	}
@@ -98,5 +110,60 @@ public class BookServiceImpl implements BookService {
 		
 		int deleteResult = bookMapper.deleteBookReview(bookReviewNo);
 		return deleteResult;
+	}
+	
+	@Override
+	public int bookLike(HttpServletRequest request, Model model) {
+		int recommened = 1;
+		String bookNo = request.getParameter("bookNo");
+		
+		BookDTO bookDTO = new BookDTO();
+		UserDTO userDTO = new UserDTO();
+		bookDTO.setBookNo(bookNo);
+		userDTO.setUserNo(1);
+		
+		UserRecommenedDTO userRecommenedDTO = new UserRecommenedDTO();
+		userRecommenedDTO.setBookDTO(bookDTO);
+		userRecommenedDTO.setUserDTO(userDTO);
+		userRecommenedDTO.setRecommened(recommened);
+		UserRecommenedDTO list = bookMapper.selectUserLike(userRecommenedDTO);
+		
+		if(list == null) {
+			bookMapper.addBookLike(userRecommenedDTO);
+			UserRecommenedDTO list2 = bookMapper.selectUserLike(userRecommenedDTO);
+			return list2.getRecommened();
+		} else {
+			bookMapper.updateUserLike(userRecommenedDTO);
+		}
+		
+
+		return list.getRecommened();
+	}
+	
+	@Override
+	public int bookDisLike(HttpServletRequest request, Model model) {
+		int recommened = -1;
+		String bookNo = request.getParameter("bookNo");
+		
+		BookDTO bookDTO = new BookDTO();
+		UserDTO userDTO = new UserDTO();
+		bookDTO.setBookNo(bookNo);
+		userDTO.setUserNo(1);
+		
+		UserRecommenedDTO userRecommenedDTO = new UserRecommenedDTO();
+		userRecommenedDTO.setBookDTO(bookDTO);
+		userRecommenedDTO.setUserDTO(userDTO);
+		userRecommenedDTO.setRecommened(recommened);
+		
+		UserRecommenedDTO list = bookMapper.selectUserLike(userRecommenedDTO);
+		if(list == null) {
+			bookMapper.addBookDisLike(userRecommenedDTO);
+			UserRecommenedDTO list2 = bookMapper.selectUserLike(userRecommenedDTO);
+			return list2.getRecommened();
+		} else {
+			bookMapper.updateUserDisLike(userRecommenedDTO);
+		}
+		
+		return list.getRecommened();
 	}
 }

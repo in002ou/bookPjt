@@ -50,6 +50,16 @@ public class BookController {
   public Map<String, Object> bookSearch(BookSearchDTO bookSearchDTO){
 	  return bookService.searchBook(bookSearchDTO);
   }
+  @GetMapping("/bookLike.do")
+  public String bookLike(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+	  redirectAttributes.addFlashAttribute("likeResult", bookService.bookLike(request, model));                     ;
+	  return "redirect:/book/bookDetail.do?bookNo=" + request.getParameter("bookNo");
+  }
+  @GetMapping("/bookDisLike.do")
+  public String bookDisLike(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+	  redirectAttributes.addFlashAttribute("dislikeResult", bookService.bookDisLike(request, model));
+	  return "redirect:/book/bookDetail.do?bookNo=" + request.getParameter("bookNo");
+  }
   
 
 }
